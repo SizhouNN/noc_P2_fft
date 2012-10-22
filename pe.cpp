@@ -11,7 +11,7 @@ void PE_base::set_xy(int x, int y)
 
 void PE_base::read_input()
 {
-	packet_in_ = data_in.read();
+	in_queue_.push_back(data_in.read());
 }
 
 void PE_base::write_output()
@@ -29,6 +29,7 @@ void PE_base::write_output()
 
 void PE_IO::execute()
 {
+	/*
 	// decide if we are going to fire PI
 	int r = rand()%100;
 	if (r < 80)
@@ -38,6 +39,7 @@ void PE_IO::execute()
 	if ((packet_in_.src_x != -1)
 		&& (packet_in_.src_y != -1))
 		fire_PO();
+		*/
 }
 
 void PE_IO::fire_PI()
@@ -54,23 +56,28 @@ void PE_IO::fire_PI()
 
 void PE_IO::fire_PO()
 {
+	/*
 	assert((packet_in_.src_x != -1)
 		&& (packet_in_.src_y != -1));
 
 	printf("PO: receive %d from (%d,%d)\n",
 		packet_in_.token, packet_in_.src_x,	packet_in_.src_y);
+		*/
 }
 
 void PE_inc::execute()
 {
+	/*
 	// fire the actor if the incoming packet is valid
 	if ((packet_in_.src_x != -1)
 		&& (packet_in_.src_y != -1))
 		fire();
+		*/
 }
 
 void PE_inc::fire()
 {
+	/*
 	assert((packet_in_.src_x != -1)
 		&& (packet_in_.src_y != -1));
 
@@ -83,4 +90,5 @@ void PE_inc::fire()
 		p.token, p.dest_x, p.dest_y);
 
 	out_queue_.push_back(p);
+	*/
 }

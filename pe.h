@@ -31,7 +31,8 @@ SC_MODULE(PE_base)
 
 protected:
 	std::list<packet> out_queue_; // output queue
-	packet packet_in_; // incoming packet from the router
+	//packet packet_in_; // incoming packet from the router
+	std::list<packet> in_queue_; // output queue
 
 	int x_, y_; // location of the PE
 
@@ -65,4 +66,8 @@ protected:
 	void fire();
 };
 
+//PROJECT 2
+class PE_green : public PE_base
+{
+};
 #endif // PE_H
