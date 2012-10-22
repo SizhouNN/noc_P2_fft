@@ -75,16 +75,28 @@ void router::route_packet_xy(packet p)
 	}
 
 	// ignore dest_y for now
-	if (p.dest_x == x_) // to PE
+	if (p.dest_y == y_)
 	{
-		out_queue_[PE].push_back(p);
+		if (p.dest_x == x_) // to PE
+		{
+			out_queue_[PE].push_back(p);
+		}
+		else if (p.dest_x < x_) // left to WEST
+		{
+			out_queue_[WEST].push_back(p);
+		}
+		else // (p.dest_x > x_) right to EAST
+		{
+			out_queue_[EAST].push_back(p);
+		}
 	}
-	else if (p.dest_x < x_) // left to WEST
+	else if (p.dest_y < y_) //up to NORTH
 	{
-		out_queue_[WEST].push_back(p);
+		out_queue_[NORTH].push_back(p);
 	}
-	else // (p.dest_x > x_) right to EAST
+	else //(p.dest_y > y_) down to SOUTH
 	{
-		out_queue_[EAST].push_back(p);
+		out_queue_[SOUTH].push_back(p);
 	}
+
 }

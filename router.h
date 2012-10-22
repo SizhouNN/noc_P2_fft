@@ -11,10 +11,11 @@ struct packet
 	int src_x, src_y;
 	int dest_x, dest_y;
 	token_type token;
+	double real, imaginary;
 
 	packet(int sx = -1, int sy = -1, int dx = -1, int dy = -1,
 		token_type t = token_type())
-		: src_x(sx), src_y(sy), dest_x(dx), dest_y(dy), token(t)
+		: src_x(sx), src_y(sy), dest_x(dx), dest_y(dy), token(t), real(0), imaginary(0)
 	{
 	}
 
