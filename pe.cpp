@@ -136,17 +136,18 @@ void PE_green::fire_green()
 	perform "green" computation described as in design
 	# - 1
 	green computation
+	## - 1
+	Get input for ALU, prepare output of ALU
+	Call ALU
 	# - 2
 	process output queue
 	*/
 
     //# - 1
-
-
-	double param_former_real = in_queue_.front().real;
-	double param_former_imaginary = in_queue_.front().imaginary;
-	double param_later_real = in_queue_.back().real;
-	double param_later_imaginary = in_queue_.back().imaginary;
+	complex_num * source = new complex_num[2];
+	complex_num * result = new complex_num[2];
+		
+	ALU(source, 0, result);
 
 	double result_add_real = param_former_real + param_later_real;
 	double result_add_imaginary = param_former_imaginary + param_later_imaginary;
@@ -156,14 +157,15 @@ void PE_green::fire_green()
 
 }
 
-double * PE_green::ALU(double param_former_real, double param_former_imaginary, double param_later_real, double param_later_imaginary, int powerOfw)
+void PE_green::ALU(const complex_num (&input)[2], int powerOfw, complex_num (& output)[2])
 {
 	/* FUNCTION DESCRIPTION
 	As name suggest: ALU
 	The function simulates 4 input 4 output FFT element ALU with mux selected by powerOfw
 	*/
 	const double w_real = cos(PI/4), w_imaginary = -sin(PI/4);
-
+	const double w2_real;
+	
 
 
 }
