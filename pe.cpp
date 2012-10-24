@@ -130,6 +130,7 @@ void PE_green::execute()
 	}
 }
 
+//Currently the fire_green is only for green
 void PE_green::fire_green()
 {
 	/* FUNCTION DESCRIPTION:
@@ -149,10 +150,6 @@ void PE_green::fire_green()
 		
 	ALU(source, 0, result);
 
-	double result_add_real = param_former_real + param_later_real;
-	double result_add_imaginary = param_former_imaginary + param_later_imaginary;
-	double result_sub_real = param_former_real - param_later_real;
-	double result_sub_imaginary = param_former_imaginary - param_later_imaginary;
 
 
 }
@@ -161,10 +158,34 @@ void PE_green::ALU(const complex_num (&input)[2], int powerOfw, complex_num (& o
 {
 	/* FUNCTION DESCRIPTION
 	As name suggest: ALU
-	The function simulates 4 input 4 output FFT element ALU with mux selected by powerOfw
+	The function simulates 4 input 4 output FFT element ALU with 4to1mux selected by powerOfw
 	*/
-	const double w_real = cos(PI/4), w_imaginary = -sin(PI/4);
-	const double w2_real;
+	complex_num w;
+	w.real = cos(PI/4);
+	w.imaginary = -sin(PI/4);
+	
+	complex_num w2 = w * w;
+	complex_num w3 = w2 * w;
+
+	switch (powerOfw)
+	{
+	case 0:
+		output[0] = input[0] + input[1];
+		output[1] = input[0] - input[1];
+		break;
+	case 1:
+		output[0] = input[0] + input[1] * w;
+		output[1] = input[0] - input[1] * w;
+		break;
+	case 2:
+		output[0] = input[0] + input[1] * w2;
+		output[1] = input[0] - input[1] * w2;
+		break;
+	case 3:
+		output[0] = input[0] + input[1] * w3;
+		output[1] = input[0] - input[1] * w3;
+		break;
+	}
 	
 
 
@@ -172,4 +193,13 @@ void PE_green::ALU(const complex_num (&input)[2], int powerOfw, complex_num (& o
 
 void PE_green::linkLayer()
 {
+	/* FUNCTION DESCRIPTION:
+	As the name suggest, the linkLayer() determine where the output packet shall be send to.
+	(or even in the future, the linkLayer() shall be responsible to identify where the input packet is from.)
+
+	More param in packet is called for:
+	data_level, data_index, source_address, destination_address
+
+
+
 }

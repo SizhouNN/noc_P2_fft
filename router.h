@@ -30,6 +30,14 @@ struct complex_num
 		return result;
 	}
 
+		complex_num operator - (const complex_num &input2) const
+	{
+		complex_num result;
+		result.real = this->real - input2.real;
+		result.imaginary = this->imaginary - input2.imaginary;
+		return result;
+	}
+
 }; //struct complex_num
 
 struct packet
