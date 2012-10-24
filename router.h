@@ -6,16 +6,28 @@
 
 // a empty packet has src_x == src_y == dest_x == dest_y == -1
 typedef int token_type;
+struct complex_num
+{
+	double real;
+	double imaginary;
+	complex_num(){
+		real = -1;
+		imaginary = -1;
+	}
+
+}; //struct complex_num
+
 struct packet
 {
 	int src_x, src_y;
 	int dest_x, dest_y;
 	token_type token;
-	double real, imaginary;
+	
+	complex_num cplx_n;
 
 	packet(int sx = -1, int sy = -1, int dx = -1, int dy = -1,
 		token_type t = token_type())
-		: src_x(sx), src_y(sy), dest_x(dx), dest_y(dy), token(t), real(0), imaginary(0)
+		: src_x(sx), src_y(sy), dest_x(dx), dest_y(dy), token(t)
 	{
 	}
 
