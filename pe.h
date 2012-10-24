@@ -69,5 +69,42 @@ protected:
 //PROJECT 2
 class PE_green : public PE_base
 {
+public:
+		PE_green(const char *name) : PE_base(name) {}
+
+protected:
+	void execute();
+	void fire_green();
+	void linkLayer();
+};
+
+class PE_blue : public PE_base
+{
+public:
+		PE_blue(const char *name) : PE_base(name) {}
+
+protected:
+	void execute();
+	void fire_blue();
+};
+
+class PE_orange : public PE_base
+{
+public:
+		PE_orange(const char *name) : PE_base(name) {}
+
+protected:
+	void execute();
+	void fire_orange();
+};
+
+class PE_red : public PE_base
+{
+public:
+		PE_red(const char *name) : PE_base(name) {}
+
+protected:
+	void execute();
+	void fire_red();
 };
 #endif // PE_H
