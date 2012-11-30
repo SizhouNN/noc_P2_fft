@@ -11,7 +11,7 @@ struct complex_num
 	double real;
 	double imaginary;
 	complex_num(){
-		real = -1;
+		real = -1; 
 		imaginary = -1;
 	}
 
