@@ -153,6 +153,19 @@ void PE_green::fire_green()
 
 
 }
+
+void PE_base::set_dest(dim2 l0, dim2 l1, dim2 l2, dim2 l3, dim2 l4, dim2 l5, dim2 l6, dim2 l7)
+{
+	FSM_d[0] = l0;
+	FSM_d[0] = l1;
+	FSM_d[0] = l2;
+	FSM_d[0] = l3;
+	FSM_d[0] = l4;
+	FSM_d[0] = l5;
+	FSM_d[0] = l6;
+	FSM_d[0] = l7;
+}
+
 void PE_base::execute()
 {
 	/* FUNCTION DESCRIPTION

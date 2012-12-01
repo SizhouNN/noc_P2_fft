@@ -27,6 +27,8 @@ SC_MODULE(PE_base)
 	// use this function to set the coordinates of the PE
 	void set_xy(int x, int y);
 
+	void set_dest(dim2 l0, dim2 l1, dim2 l2, dim2 l3, dim2 l4, dim2 l5, dim2 l6, dim2 l7);
+
 	virtual ~PE_base() {}
 
 protected:
