@@ -153,6 +153,26 @@ void PE_green::fire_green()
 
 
 }
+void PE_base::execute()
+{
+	/* FUNCTION DESCRIPTION
+	Fire PE only when the in queue size is 2. And after execute, the in queue size shall be 0 again;
+
+
+	*/
+	if (in_queue_.back().src_x == -1)
+	{
+		in_queue_.pop_back();
+
+	} else if (in_queue_.size() == 2)
+	{
+		fire();//fire will call what is necessary in the PE physical structure
+		in_queue_.clear();
+
+	}
+
+}
+
 
 void PE_base::ALU(int powerOfw)
 {

@@ -37,9 +37,11 @@ protected:
 	int x_, y_; // location of the PE
 
 	virtual void read_input(); // read a packet from the the router
-	virtual void execute() = 0; // abstraction of computations
+	virtual void execute(); // abstraction of computations NOT PURE ANY MORE
 	virtual void write_output(); // // send a packet to the router
 	
+	virtual void fire(void);
+
 	//ALU inside PE, specified for Project 2 FFT-DCT
 	complex_num ALU_in[2];
 	complex_num ALU_out[2];
