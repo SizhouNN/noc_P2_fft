@@ -157,8 +157,8 @@ void PE_green::fire_green()
 void PE_green::ALU(const complex_num (&input)[2], int powerOfw, complex_num (& output)[2])
 {
 	/* FUNCTION DESCRIPTION
-	As name suggest: ALU
-	The function simulates 4 input 4 output FFT element ALU with 4to1mux selected by powerOfw
+	*As name suggest: ALU
+	*The function simulates 4 input 4 output FFT element ALU with 4to1mux selected by powerOfw
 	*/
 	complex_num w;
 	w.real = cos(PI/4);

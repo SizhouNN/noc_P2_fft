@@ -40,6 +40,13 @@ struct complex_num
 
 }; //struct complex_num
 
+struct data_info
+{
+  int layer;
+	int index;
+
+}
+
 struct packet
 {
 	int src_x, src_y;
@@ -47,7 +54,7 @@ struct packet
 	token_type token;
 	
 	complex_num cplx_n;
-
+  data_info info;
 	packet(int sx = -1, int sy = -1, int dx = -1, int dy = -1,
 		token_type t = token_type())
 		: src_x(sx), src_y(sy), dest_x(dx), dest_y(dy), token(t)

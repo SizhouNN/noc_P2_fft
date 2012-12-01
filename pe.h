@@ -39,6 +39,7 @@ protected:
 	virtual void read_input(); // read a packet from the the router
 	virtual void execute() = 0; // abstraction of computations
 	virtual void write_output(); // // send a packet to the router
+	
 }; // PE_base
 
 // for PI and PO
