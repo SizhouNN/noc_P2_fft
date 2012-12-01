@@ -42,6 +42,14 @@ protected:
 	
 	virtual void fire(void);
 
+	void Linker_layer();
+	packet linker_out[2];
+
+	void CPU();
+	dim2 CPU_out[2];
+
+	dim2 FSM_d[8];
+
 	//ALU inside PE, specified for Project 2 FFT-DCT
 	complex_num ALU_in[2];
 	complex_num ALU_out[2];

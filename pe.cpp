@@ -173,6 +173,379 @@ void PE_base::execute()
 
 }
 
+void PE_base::fire()
+{
+	CPU();
+	//Now I have CPU_out and ALU_out
+	Linker_layer();
+	out_queue_.push_back(linker_out[0]);
+	out_queue_.push_back(linker_out[1]);
+	
+	
+}
+
+void PE_base::Linker_layer()
+{
+	int i;
+	for (i = 0; i<2;i++)
+	{
+		linker_out[i].cplx_n = ALU_out[i];
+		linker_out[i].src_x = x_;
+		linker_out[i].src_y = y_;
+		linker_out[i].dest_x = CPU_out[i].x;
+		linker_out[i].dest_y = CPU_out[i].y;
+	}
+	
+
+	packet tmp = in_queue_.front();
+	switch (tmp.info.layer)
+	{
+	case 0: //x
+		linker_out[0].info.layer = 1;
+		linker_out[1].info.layer = 1;
+		switch (tmp.info.index)
+		{
+		case 0:
+			linker_out[0].info.index = 0;
+			linker_out[1].info.index = 1;
+			break;
+		case 1:
+			linker_out[0].info.index = 4;
+			linker_out[1].info.index = 5;
+			break;
+		case 2:
+			linker_out[0].info.index = 2;
+			linker_out[1].info.index = 3;
+			break;
+		case 3:
+			linker_out[0].info.index = 6;
+			linker_out[1].info.index = 7;
+			break;
+		case 4:
+			linker_out[0].info.index = 0;
+			linker_out[1].info.index = 1;
+			break;
+		case 5:
+			linker_out[0].info.index = 4;
+			linker_out[1].info.index = 5;
+			break;
+		case 6:
+			linker_out[0].info.index = 2;
+			linker_out[1].info.index = 3;
+			break;
+		case 7:
+			linker_out[0].info.index = 6;
+			linker_out[1].info.index = 7;
+			break;
+		default:
+			printf("Impossible Index\n");
+			break;
+		}
+		break;
+	case 1: //y
+		linker_out[0].info.layer = 2;
+		linker_out[1].info.layer = 2;
+		switch (tmp.info.index)
+		{
+		case 0:
+			linker_out[0].info.index = 0;
+			linker_out[1].info.index = 1;
+			break;
+		case 1:
+			linker_out[0].info.index = 2;
+			linker_out[1].info.index = 3;
+			break;
+		case 2:
+			linker_out[0].info.index = 0;
+			linker_out[1].info.index = 1;
+			break;
+		case 3:
+			linker_out[0].info.index = 2;
+			linker_out[1].info.index = 3;
+			break;
+		case 4:
+			linker_out[0].info.index = 4;
+			linker_out[1].info.index = 5;
+			break;
+		case 5:
+			linker_out[0].info.index = 6;
+			linker_out[1].info.index = 7;
+			break;
+		case 6:
+			linker_out[0].info.index = 4;
+			linker_out[1].info.index = 5;
+			break;
+		case 7:
+			linker_out[0].info.index = 6;
+			linker_out[1].info.index = 7;
+			break; 
+		default:
+			printf("Impossible Index\n");
+			break;
+		}
+		break;
+	case 2: //z
+		linker_out[0].info.layer = 3;
+		linker_out[1].info.layer = 3;
+		switch (tmp.info.index)
+		{
+		case 0:
+			linker_out[0].info.index = 0;
+			linker_out[1].info.index = 4;
+			break;
+		case 1:
+			linker_out[0].info.index = 2;
+			linker_out[1].info.index = 6;
+			break;
+		case 2:
+			linker_out[0].info.index = 1;
+			linker_out[1].info.index = 5;
+			break;
+		case 3:
+			linker_out[0].info.index = 3;
+			linker_out[1].info.index = 7;
+			break;
+		case 4:
+			linker_out[0].info.index = 0;
+			linker_out[1].info.index = 4;
+			break;
+		case 5:
+			linker_out[0].info.index = 2;
+			linker_out[1].info.index = 6;
+			break;
+		case 6:
+			linker_out[0].info.index = 1;
+			linker_out[1].info.index = 5;
+			break;
+		case 7:
+			linker_out[0].info.index = 3;
+			linker_out[1].info.index = 7;
+			break;
+		default:
+			printf("Impossible Index\n");
+			break;
+		}
+		break;
+	default:
+		printf("Impossible Layer\n");
+		break;
+	}
+	
+}
+
+
+void PE_base::CPU()
+{
+	assert(!in_queue_.empty());
+	assert(in_queue_.size() == 2);
+
+	packet tmp = in_queue_.front();
+
+	switch (tmp.info.layer)
+	{
+	case 0: //x
+		switch (tmp.info.index)
+		{
+		case 0:
+			ALU_in[0] = in_queue_.front().cplx_n;
+			ALU_in[1] = in_queue_.back().cplx_n;
+			ALU(0);
+			CPU_out[0] = FSM_d[0];
+			CPU_out[1] = FSM_d[1];
+			break;
+		case 1:
+			ALU_in[0] = in_queue_.front().cplx_n;
+			ALU_in[1] = in_queue_.back().cplx_n;
+			ALU(0);
+			CPU_out[0] = FSM_d[2];
+			CPU_out[1] = FSM_d[3];
+			break;
+		case 2:
+			ALU_in[0] = in_queue_.front().cplx_n;
+			ALU_in[1] = in_queue_.back().cplx_n;
+			ALU(0);
+			CPU_out[0] = FSM_d[0];
+			CPU_out[1] = FSM_d[1];
+			break;
+		case 3:
+			ALU_in[0] = in_queue_.front().cplx_n;
+			ALU_in[1] = in_queue_.back().cplx_n;
+			ALU(0);
+			CPU_out[0] = FSM_d[2];
+			CPU_out[1] = FSM_d[3];
+			break;
+		case 4:
+			ALU_in[1] = in_queue_.front().cplx_n;
+			ALU_in[0] = in_queue_.back().cplx_n;
+			ALU(0);
+			CPU_out[0] = FSM_d[0];
+			CPU_out[1] = FSM_d[1];
+			break;
+		case 5:
+			ALU_in[1] = in_queue_.front().cplx_n;
+			ALU_in[0] = in_queue_.back().cplx_n;
+			ALU(0);
+			CPU_out[0] = FSM_d[2];
+			CPU_out[1] = FSM_d[3];
+			break;
+		case 6:
+			ALU_in[1] = in_queue_.front().cplx_n;
+			ALU_in[0] = in_queue_.back().cplx_n;
+			ALU(0);
+			CPU_out[0] = FSM_d[0];
+			CPU_out[1] = FSM_d[1];
+			break;
+		case 7:
+			ALU_in[1] = in_queue_.front().cplx_n;
+			ALU_in[0] = in_queue_.back().cplx_n;
+			ALU(0);
+			CPU_out[0] = FSM_d[2];
+			CPU_out[1] = FSM_d[3];
+			break;
+		default:
+			printf("Impossible Index\n");
+			break;
+		}
+		break;
+	case 1: //y
+		switch (tmp.info.index)
+		{
+		case 0:
+			ALU_in[0] = in_queue_.front().cplx_n;
+			ALU_in[1] = in_queue_.back().cplx_n;
+			ALU(0);
+			CPU_out[0] = FSM_d[0];
+			CPU_out[1] = FSM_d[2];
+			break;
+		case 1:
+			ALU_in[0] = in_queue_.front().cplx_n;
+			ALU_in[1] = in_queue_.back().cplx_n;
+			ALU(2);
+			CPU_out[0] = FSM_d[1];
+			CPU_out[1] = FSM_d[3];
+			break;
+		case 2:
+			ALU_in[1] = in_queue_.front().cplx_n;
+			ALU_in[0] = in_queue_.back().cplx_n;
+			ALU(0);
+			CPU_out[0] = FSM_d[0];
+			CPU_out[1] = FSM_d[2];
+			break;
+		case 3:
+			ALU_in[1] = in_queue_.front().cplx_n;
+			ALU_in[0] = in_queue_.back().cplx_n;
+			ALU(2);
+			CPU_out[0] = FSM_d[1];
+			CPU_out[1] = FSM_d[3];
+			break;
+		case 4:
+			ALU_in[0] = in_queue_.front().cplx_n;
+			ALU_in[1] = in_queue_.back().cplx_n;
+			ALU(0);
+			CPU_out[0] = FSM_d[0];
+			CPU_out[1] = FSM_d[2];
+			break;
+		case 5:
+			ALU_in[0] = in_queue_.front().cplx_n;
+			ALU_in[1] = in_queue_.back().cplx_n;
+			ALU(2);
+			CPU_out[0] = FSM_d[1];
+			CPU_out[1] = FSM_d[3];
+			break;
+		case 6:
+			ALU_in[1] = in_queue_.front().cplx_n;
+			ALU_in[0] = in_queue_.back().cplx_n;
+			ALU(0);
+			CPU_out[0] = FSM_d[0];
+			CPU_out[1] = FSM_d[2];
+			break;
+		case 7:
+			ALU_in[1] = in_queue_.front().cplx_n;
+			ALU_in[0] = in_queue_.back().cplx_n;
+			ALU(2);
+			CPU_out[0] = FSM_d[1];
+			CPU_out[1] = FSM_d[3];
+			break; 
+		default:
+			printf("Impossible Index\n");
+			break;
+		}
+		break;
+	case 2: //z
+		switch (tmp.info.index)
+		{
+		case 0:
+			ALU_in[0] = in_queue_.front().cplx_n;
+			ALU_in[1] = in_queue_.back().cplx_n;
+			ALU(0);
+			CPU_out[0] = FSM_d[0];
+			CPU_out[1] = FSM_d[4];
+			break;
+		case 1:
+			ALU_in[0] = in_queue_.front().cplx_n;
+			ALU_in[1] = in_queue_.back().cplx_n;
+			ALU(2);
+			CPU_out[0] = FSM_d[2];
+			CPU_out[1] = FSM_d[6];
+			break;
+		case 2:
+			ALU_in[0] = in_queue_.front().cplx_n;
+			ALU_in[1] = in_queue_.back().cplx_n;
+			ALU(1);
+			CPU_out[0] = FSM_d[1];
+			CPU_out[1] = FSM_d[5];
+			break;
+		case 3:
+			ALU_in[0] = in_queue_.front().cplx_n;
+			ALU_in[1] = in_queue_.back().cplx_n;
+			ALU(3);
+			CPU_out[0] = FSM_d[3];
+			CPU_out[1] = FSM_d[7];
+			break;
+		case 4:
+			ALU_in[1] = in_queue_.front().cplx_n;
+			ALU_in[0] = in_queue_.back().cplx_n;
+			ALU(0);
+			CPU_out[0] = FSM_d[0];
+			CPU_out[1] = FSM_d[4];
+			break;
+		case 5:
+			ALU_in[1] = in_queue_.front().cplx_n;
+			ALU_in[0] = in_queue_.back().cplx_n;
+			ALU(2);
+			CPU_out[0] = FSM_d[2];
+			CPU_out[1] = FSM_d[6];
+			break;
+		case 6:
+			ALU_in[1] = in_queue_.front().cplx_n;
+			ALU_in[0] = in_queue_.back().cplx_n;
+			ALU(1);
+			CPU_out[0] = FSM_d[1];
+			CPU_out[1] = FSM_d[5];
+			break;
+		case 7:
+			ALU_in[1] = in_queue_.front().cplx_n;
+			ALU_in[0] = in_queue_.back().cplx_n;
+			ALU(3);
+			CPU_out[0] = FSM_d[3];
+			CPU_out[1] = FSM_d[7];
+			break;
+		default:
+			printf("Impossible Index\n");
+			break;
+		}
+		break;
+	default:
+		printf("Impossible Layer\n");
+		break;
+	}
+
+	//FSM_Controller finished. ALU_out ready for pack-up
+
+
+	
+
+}
 
 void PE_base::ALU(int powerOfw)
 {

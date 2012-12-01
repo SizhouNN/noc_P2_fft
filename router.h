@@ -6,6 +6,13 @@
 
 // a empty packet has src_x == src_y == dest_x == dest_y == -1
 typedef int token_type;
+
+struct dim2
+{
+	int x;
+	int y;
+}
+
 struct complex_num
 {
 	double real;
@@ -54,7 +61,7 @@ struct packet
 	token_type token;
 	
 	complex_num cplx_n;
-  data_info info;
+	data_info info;
 	packet(int sx = -1, int sy = -1, int dx = -1, int dy = -1,
 		token_type t = token_type())
 		: src_x(sx), src_y(sy), dest_x(dx), dest_y(dy), token(t)
