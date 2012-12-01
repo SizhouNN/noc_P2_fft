@@ -42,7 +42,7 @@ protected:
 	virtual void execute(); // abstraction of computations NOT PURE ANY MORE
 	virtual void write_output(); // // send a packet to the router
 	
-	virtual void fire(void);
+	virtual void fire();
 
 	void Linker_layer();
 	packet linker_out[2];
