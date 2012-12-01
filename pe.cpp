@@ -154,11 +154,13 @@ void PE_green::fire_green()
 
 }
 
-void PE_green::ALU(const complex_num (&input)[2], int powerOfw, complex_num (& output)[2])
+void PE_base::ALU(int powerOfw)
 {
 	/* FUNCTION DESCRIPTION
-	*As name suggest: ALU
-	*The function simulates 4 input 4 output FFT element ALU with 4to1mux selected by powerOfw
+	As name suggest: ALU
+	The function simulates 2 input 2 output FFT element ALU with 4to1mux selected by powerOfw;
+	ALU doesn't care about sequence, it just reads ALU_in[2] and generate ALU_out[2];
+	Out layer manage ALU_in and and identify ALU_out;
 	*/
 	complex_num w;
 	w.real = cos(PI/4);
@@ -170,25 +172,23 @@ void PE_green::ALU(const complex_num (&input)[2], int powerOfw, complex_num (& o
 	switch (powerOfw)
 	{
 	case 0:
-		output[0] = input[0] + input[1];
-		output[1] = input[0] - input[1];
+		ALU_out[0] = ALU_in[0] + ALU_in[1];
+		ALU_out[1] = ALU_in[0] - ALU_in[1];
 		break;
 	case 1:
-		output[0] = input[0] + input[1] * w;
-		output[1] = input[0] - input[1] * w;
+		ALU_out[0] = ALU_in[0] + ALU_in[1] * w;
+		ALU_out[1] = ALU_in[0] - ALU_in[1] * w;
 		break;
 	case 2:
-		output[0] = input[0] + input[1] * w2;
-		output[1] = input[0] - input[1] * w2;
+		ALU_out[0] = ALU_in[0] + ALU_in[1] * w2;
+		ALU_out[1] = ALU_in[0] - ALU_in[1] * w2;
 		break;
 	case 3:
-		output[0] = input[0] + input[1] * w3;
-		output[1] = input[0] - input[1] * w3;
+		ALU_out[0] = ALU_in[0] + ALU_in[1] * w3;
+		ALU_out[1] = ALU_in[0] - ALU_in[1] * w3;
 		break;
 	}
 	
-
-
 }
 
 void PE_green::linkLayer()

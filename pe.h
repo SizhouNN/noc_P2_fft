@@ -40,6 +40,11 @@ protected:
 	virtual void execute() = 0; // abstraction of computations
 	virtual void write_output(); // // send a packet to the router
 	
+	//ALU inside PE, specified for Project 2 FFT-DCT
+	complex_num ALU_in[2];
+	complex_num ALU_out[2];
+	void ALU(int);
+
 }; // PE_base
 
 // for PI and PO
