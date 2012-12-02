@@ -22,8 +22,11 @@ public:
 
 	SC_CTOR(top)
 	{
+		
 		create_pes();
+		
 		create_network();
+
 	}
 
 protected:
@@ -31,10 +34,12 @@ protected:
 	{
 		for (int i = 0; i < N; ++i)
 		{
+
 			for (int j = 0; j < M; ++j)
 			{	
 				if((i==1&&j==1)||(i==0&&j==0))
 				{
+					printf(" ");
 				}else
 				{
 					char name[100];
@@ -51,7 +56,9 @@ protected:
 		pes[0][0] = new PE_I("PE0_0");
 		pes[0][0]->clock(clock);
 		pes[0][0]->set_xy(0, 0);
+
 		pes[0][0]->init();
+
 		pes[0][0]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
 			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));
 
@@ -174,7 +181,7 @@ int sc_main(int argc , char *argv[])
 	srand(0);
 
 	top top_module("top");
-
+	printf("FINISHED TOP CONSTRUCTOR");
 	printf("cycle  0 ================================\n");
 	sc_start(0, SC_NS);
 

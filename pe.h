@@ -84,7 +84,7 @@ public:
 protected:
 	void execute();
 
-	char mem_c[MAX_INPUT][32];
+	char mem_c[MAX_INPUT][128];
 	complex_num mem_cplx[MAX_INPUT];
 
 	int existing_input;

@@ -754,34 +754,63 @@ void PE_I::init()
 {
 	//#-1 read file into char array of 1024 line by line
 	int i;
+	int j;
+	int valid;
+	char tmp[128];
+
 	existing_input = 0;
 	FILE * pFile;
 	pFile = fopen ("INPUT.txt" , "r");
-	if (pFile == NULL) printf ("Error opening file %s.\n", filename);
+
+	if (pFile == NULL) 
+	{
+		printf ("Error opening file %s.\n", filename);
+	}
 	else
 	{
 		for (i=0;i<MAX_INPUT;i++)
 		{
 			if ( fgets (mem_c[existing_input] , 128 , pFile) != NULL )
 			{
+				//trim whit space
+				valid = 0;
+				for (j = 0; j< 128 ; ++j)
+				{
+					
+					if(mem_c[existing_input][j] != ' ')
+					{
+						tmp[valid]=mem_c[i][j];
+						valid++;
+					}
+				}
+				strcpy(mem_c[existing_input], tmp);
 				existing_input++;
+
+				//printf(" ### existing = %d, string =  %s\n", existing_input, mem_c[i]);
 			}
 		}
        
 	}
+	
 	//#-2 convert char to complex_num 1024 line by line
 
-	char minus_cut[128];
-	char real_cut[128];
-	char real_c[128];
-	char imag_c[128];
+	//char minus_cut[128];
+	//char real_cut[128];
+	//char real_c[128];
+	//char imag_c[128];
+	char * real_c = (char*)malloc(128);
+	char * real_cut = (char*)malloc(128);
+	char * minus_cut = (char*)malloc(128);
+	char * imag_c = (char*)malloc(128);
+	
 	char * main_operator;
 	char * i_operator;
 	int counter = 0;
 	int sizei;
 	size_t sizet;
-	for (i=0;i<existing_input++;i++)
+	for (i=0;i<existing_input;i++)
 	{
+		
 		if(mem_c[i][0] == '-') //real part is negative
 		{
 			strcpy(minus_cut, mem_c[i]+1);
@@ -856,16 +885,21 @@ void PE_I::init()
 			{
 				main_operator = strchr(mem_c[i], '+');
 				i_operator = strchr(mem_c[i], 'i');
+				//printf("i is %d\n", i_operator - mem_c[i]); 
 				//Real part
 				sizei = 0;
 				while(mem_c[i] + sizei != main_operator) sizei++;
+				
 				sizet = sizei;
 				memcpy(real_cut, mem_c[i], sizet);
 				real_cut[sizei] = '\0';
+				//printf("#%s#\n", real_cut);
 				memcpy(real_c, real_cut, sizet+1);
 				//Imag part
 				sizei = 0;
-				while(main_operator + 1 + sizei != i_operator)sizei++;
+				//printf("sizei = %d, i is %d\n",sizei, i_operator - main_operator); 
+				while((main_operator + 1 + sizei) != i_operator)sizei++;
+				//printf("sizei = %d\n",sizei); 
 				sizet = sizei;
 				memcpy(imag_c, main_operator+1, sizet);
 				imag_c[sizei] = '\0';
@@ -874,7 +908,18 @@ void PE_I::init()
 				mem_cplx[i].imaginary = strtod(imag_c, NULL);
 			}
 		}
+		//printf(" ### existing = %d, MAX_INPUT = %d, converted =  %lf+%lfi\n", existing_input, MAX_INPUT, mem_cplx[i].real, mem_cplx[i].imaginary);
 	}
+	//printf("#########################\n");
+	free(real_c);
+	//printf("#########################\n");
+	free(real_cut);
+	//printf("#########################\n");
+	free(minus_cut);
+	//printf("#########################\n");
+	free(imag_c);
+	//printf("#########################\n");
+	
 }
 
 void PE_unit::init()
