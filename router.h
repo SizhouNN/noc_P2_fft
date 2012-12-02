@@ -23,7 +23,7 @@ struct dim2
 		x = a;
 		y = b;
 	}
-}
+};
 
 struct complex_num
 {
@@ -66,7 +66,7 @@ struct data_info
   int layer;
 	int index;
 
-}
+};
 
 struct packet
 {

@@ -69,7 +69,7 @@ public:
 protected:
 
 	void init();
-}
+};
 
 
 // for PI and PO

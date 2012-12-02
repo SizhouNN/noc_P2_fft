@@ -876,3 +876,8 @@ void PE_I::init()
 		}
 	}
 }
+
+void PE_unit::init()
+{
+	return;
+}

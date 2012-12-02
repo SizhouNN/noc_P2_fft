@@ -33,14 +33,19 @@ protected:
 		{
 			for (int j = 0; j < M; ++j)
 			{	
-				char name[100];
-				sprintf(name, "PE%d_%d", j, i);
-				pes[i][j] = new PE_unit(name);
-				pes[i][j]->clock(clock);
-				pes[i][j]->set_xy(j, i);
+				if((i==1&&j==1)||(i==0&&j==0))
+				{
+				}else
+				{
+					char name[100];
+					sprintf(name, "PE%d_%d", j, i);
+					pes[i][j] = new PE_unit(name);
+					pes[i][j]->clock(clock);
+					pes[i][j]->set_xy(j, i);
+				}
 			}
 		}
-		
+
 		//set up PE_I
 		//layer 0
 		pes[0][0] = new PE_I("PE0_0");
@@ -173,7 +178,7 @@ int sc_main(int argc , char *argv[])
 	printf("cycle  0 ================================\n");
 	sc_start(0, SC_NS);
 
-	for(int i = 1; i < 20; i++){
+	for(int i = 1; i < 2000; i++){
 		
 		printf("cycle %2d ================================\n", i);
 
