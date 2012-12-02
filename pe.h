@@ -60,69 +60,31 @@ protected:
 }; // PE_base
 
 // for PI and PO
-class PE_IO : public PE_base
+class PE_I : public PE_base
 {
 public:
-	PE_IO(const char *name) : PE_base(name) {}
+	PE_I(const char *name) : PE_base(name) {}
 
 protected:
 	void execute();
 
-	void fire_PI();
-	void fire_PO();
-}; // class PE_IO
+	
+	void fire_I();
 
-// for P1
-class PE_inc : public PE_base
+}; // class PE_I
+
+
+class PE_O : public PE_base
 {
 public:
-	PE_inc(const char *name) : PE_base(name) {}
+	PE_O(const char *name) : PE_base(name) {}
 
 protected:
 	void execute();
+	complex_num fire_out[8];
+	void fire_O();
 
-	void fire();
-};
+}; // class PE_O
 
-//PROJECT 2
-class PE_green : public PE_base
-{
-public:
-		PE_green(const char *name) : PE_base(name) {}
 
-protected:
-	void execute();
-	void fire_green();
-	void linkLayer();
-};
-
-class PE_blue : public PE_base
-{
-public:
-		PE_blue(const char *name) : PE_base(name) {}
-
-protected:
-	void execute();
-	void fire_blue();
-};
-
-class PE_orange : public PE_base
-{
-public:
-		PE_orange(const char *name) : PE_base(name) {}
-
-protected:
-	void execute();
-	void fire_orange();
-};
-
-class PE_red : public PE_base
-{
-public:
-		PE_red(const char *name) : PE_base(name) {}
-
-protected:
-	void execute();
-	void fire_red();
-};
 #endif // PE_H

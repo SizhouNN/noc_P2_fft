@@ -28,10 +28,10 @@ void PE_base::write_output()
 		out_queue_.pop_front();
 	}
 }
-
+/*
 void PE_IO::execute()
 {
-	/*
+	
 	// decide if we are going to fire PI
 	int r = rand()%100;
 	if (r < 80)
@@ -41,7 +41,7 @@ void PE_IO::execute()
 	if ((packet_in_.src_x != -1)
 	&& (packet_in_.src_y != -1))
 	fire_PO();
-	*/
+	
 }
 
 void PE_IO::fire_PI()
@@ -58,28 +58,27 @@ void PE_IO::fire_PI()
 
 void PE_IO::fire_PO()
 {
-	/*
+	
 	assert((packet_in_.src_x != -1)
 	&& (packet_in_.src_y != -1));
 
 	printf("PO: receive %d from (%d,%d)\n",
 	packet_in_.token, packet_in_.src_x,	packet_in_.src_y);
-	*/
+	
 }
 
 void PE_inc::execute()
 {
-	/*
+	
 	// fire the actor if the incoming packet is valid
 	if ((packet_in_.src_x != -1)
 	&& (packet_in_.src_y != -1))
 	fire();
-	*/
+	
 }
-
 void PE_inc::fire()
 {
-	/*
+	
 	assert((packet_in_.src_x != -1)
 	&& (packet_in_.src_y != -1));
 
@@ -92,11 +91,11 @@ void PE_inc::fire()
 	p.token, p.dest_x, p.dest_y);
 
 	out_queue_.push_back(p);
-	*/
-}
+	
+}*/
 
-void PE_green::execute()
-{
+//void PE_green::execute()
+//{
 	/* FUNCTION DESCRIPTION:
 	execute PE-green
 	fire PE_green under the condition:
@@ -115,7 +114,7 @@ void PE_green::execute()
 	## - 2
 	clean input queue (behavior)
 	*/
-
+/*
 	//# - 1
 	assert(!in_queue_.empty());
 	if (in_queue_.back().src_x == -1)
@@ -128,11 +127,11 @@ void PE_green::execute()
 		//## - 2
 		in_queue_.clear();
 	}
-}
+}*/
 
 //Currently the fire_green is only for green
-void PE_green::fire_green()
-{
+//void PE_green::fire_green()
+//{
 	/* FUNCTION DESCRIPTION:
 	perform "green" computation described as in design
 	# - 1
@@ -143,7 +142,7 @@ void PE_green::fire_green()
 	# - 2
 	process output queue
 	*/
-
+/*
     //# - 1
 	complex_num * source = new complex_num[2];
 	complex_num * result = new complex_num[2];
@@ -152,7 +151,7 @@ void PE_green::fire_green()
 
 
 
-}
+}*/
 
 void PE_base::set_dest(dim2 l0, dim2 l1, dim2 l2, dim2 l3, dim2 l4, dim2 l5, dim2 l6, dim2 l7)
 {
@@ -597,15 +596,76 @@ void PE_base::ALU(int powerOfw)
 	
 }
 
-void PE_green::linkLayer()
-{
+//void PE_green::linkLayer()
+//{
 	/* FUNCTION DESCRIPTION:
 	As the name suggest, the linkLayer() determine where the output packet shall be send to.
 	(or even in the future, the linkLayer() shall be responsible to identify where the input packet is from.)
 
 	More param in packet is called for:
 	data_level, data_index, source_address, destination_address
+	*/
 
+
+//}
+
+void PE_O::execute()
+{
+	if (in_queue_.back().src_x == -1)
+	{
+		in_queue_.pop_back();
+
+	} else if (in_queue_.size() == 8)
+	{
+		fire_O();
+		in_queue_.clear();
+
+	}
+}
+
+void PE_O::fire_O()
+{
+	int i;
+	int k;
+	for(i=0; i<8; i++)
+	{
+		k = in_queue_.front().info.index;
+		fire_out[k] = in_queue_.front().cplx_n;
+		
+		in_queue_.pop_front();
+	}
+
+	for(i=0;i<8;i++)
+	{
+			ofstream myfile("OUTPUT.txt", ios::app);
+			if (fire_out[i].imaginary >= 0)
+			{
+				myfile<<fire_out[i].real << '+' << fire_out[i].imaginary << 'i'<<endl;
+			}else
+			{
+				myfile<<fire_out[i].real <<  fire_out[i].imaginary << 'i'<<endl;
+			}
+			myfile.close();
+	}
+
+
+}
+
+void PE_I::execute()
+{
+	if (in_queue_.size() == 0)
+	{
+		fire_I();
+
+
+	}
+}
+
+void PE_I::fire_I()
+{
+	int i;
+	int k;
+	
 
 
 }
