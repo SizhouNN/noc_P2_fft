@@ -2,6 +2,7 @@
 #define PE_H
 
 #include "router.h"
+#define MAX_INPUT 1024
 
 SC_MODULE(PE_base)
 {
@@ -68,8 +69,15 @@ public:
 protected:
 	void execute();
 
-	
+	char mem_c[MAX_INPUT][32];
+	complex_num mem_cplx[MAX_INPUT];
+
+	int existing_input;
+	int current_input;
+	char filename[128];
 	void fire_I();
+
+	void init();
 
 }; // class PE_I
 

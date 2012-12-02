@@ -653,9 +653,12 @@ void PE_O::fire_O()
 
 void PE_I::execute()
 {
-	if (in_queue_.size() == 0)
+	int rm = existing_input%8;
+	int actual = current_input + rm;
+	if (in_queue_.size() == 0 && actual < existing_input)
 	{
-		fire_I();
+		fire_I();//put 8 cplx into out_queue_
+		current_input += 8;
 
 
 	}
@@ -666,6 +669,181 @@ void PE_I::fire_I()
 	int i;
 	int k;
 	
+	packet tmp;
+	tmp.info.layer = 0;
+	tmp.src_x = x_;
+	tmp.src_y = y_;
+	for (i =0;i<8;i++)
+	{
+		tmp.info.index = i;
+		tmp.cplx_n = mem_cplx[current_input + i];
+		switch(i)
+		{
+		case 0:
+			tmp.dest_x = FSM_d[0].x;
+			tmp.dest_y = FSM_d[0].y;
+			break;
+		case 1:
+			tmp.dest_x = FSM_d[4].x;
+			tmp.dest_y = FSM_d[4].y;
+			break;
+		case 2:
+			tmp.dest_x = FSM_d[2].x;
+			tmp.dest_y = FSM_d[2].y;
+			break;
+		case 3:
+			tmp.dest_x = FSM_d[6].x;
+			tmp.dest_y = FSM_d[6].y;
+			break;
+		case 4:
+			tmp.dest_x = FSM_d[1].x;
+			tmp.dest_y = FSM_d[1].y;
+			break;
+		case 5:
+			tmp.dest_x = FSM_d[5].x;
+			tmp.dest_y = FSM_d[5].y;
+			break;
+		case 6:
+			tmp.dest_x = FSM_d[3].x;
+			tmp.dest_y = FSM_d[3].y;
+			break;
+		case 7:
+			tmp.dest_x = FSM_d[7].x;
+			tmp.dest_y = FSM_d[7].y;
+			break;
+		default:
+			printf("invalid index PE_I");
+			break;
+		}
 
+		out_queue_.push_back(tmp);
+	}
 
+}
+
+void PE_I::init()
+{
+	//#-1 read file into char array of 1024 line by line
+	int i;
+	existing_input = 0;
+	FILE * pFile;
+	pFile = fopen (filename , "r");
+	if (pFile == NULL) printf ("Error opening file %s.\n", filename);
+	else
+	{
+		for (i=0;i<MAX_INPUT;i++)
+		{
+			if ( fgets (mem_c[existing_input] , 128 , pFile) != NULL )
+			{
+				existing_input++;
+			}
+		}
+       
+	}
+	//#-2 convert char to complex_num 1024 line by line
+
+	char minus_cut[128];
+	char real_cut[128];
+	char real_c[128];
+	char imag_c[128];
+	char * main_operator;
+	char * i_operator;
+	int counter = 0;
+	int sizei;
+	size_t sizet;
+	for (i=0;i<existing_input++;i++)
+	{
+		if(mem_c[i][0] == '-') //real part is negative
+		{
+			strcpy(minus_cut, mem_c[i]+1);
+			if(strchr(minus_cut, '-') != NULL)//imag part is negative
+			{
+				main_operator = strchr(minus_cut, '-');
+				i_operator = strchr(minus_cut, 'i');
+				//Real part
+				sizei = 0;
+				while(minus_cut + sizei != main_operator) sizei++;
+				sizet = sizei;
+				memcpy(real_cut, minus_cut, sizet);
+				real_cut[sizei] = '\0';
+				real_c[0] = '-';
+				memcpy(real_c+1, real_cut, sizet+1);
+				//Imag part
+				sizei = 0;
+				while(main_operator + 1 + sizei != i_operator)sizei++;
+				sizet = sizei;
+				memcpy(imag_c, main_operator, sizet+1);
+				imag_c[sizei+1] = '\0';
+				//convert
+				mem_cplx[i].real = strtod(real_c, NULL);
+				mem_cplx[i].imaginary = strtod(imag_c, NULL);
+			}
+			else if(strchr(minus_cut, '+') != NULL)//imag is positive
+			{
+				main_operator = strchr(minus_cut, '+');
+				i_operator = strchr(minus_cut, 'i');
+				//Real part
+				sizei = 0;
+				while(minus_cut + sizei != main_operator) sizei++;
+				sizet = sizei;
+				memcpy(real_cut, minus_cut, sizet);
+				real_cut[sizei] = '\0';
+				real_c[0] = '-';
+				memcpy(real_c+1, real_cut, sizet+1);
+				//Imag part
+				sizei = 0;
+				while(main_operator + 1 + sizei != i_operator)sizei++;
+				sizet = sizei;
+				memcpy(imag_c, main_operator+1, sizet);
+				imag_c[sizei] = '\0';
+				//convert
+				mem_cplx[i].real = strtod(real_c, NULL);
+				mem_cplx[i].imaginary = strtod(imag_c, NULL);
+			}
+		}else //real part is positive
+		{
+			if(strchr(mem_c[i], '-') != NULL)//imag part is negative
+			{
+				main_operator = strchr(mem_c[i], '-');
+				i_operator = strchr(mem_c[i], 'i');
+				//Real part
+				sizei = 0;
+				while(mem_c[i] + sizei != main_operator) sizei++;
+				sizet = sizei;
+				memcpy(real_cut, mem_c[i], sizet);
+				real_cut[sizei] = '\0';
+				memcpy(real_c, real_cut, sizet+1);
+				//Imag part
+				sizei = 0;
+				while(main_operator + 1 + sizei != i_operator)sizei++;
+				sizet = sizei;
+				memcpy(imag_c, main_operator, sizet+1);
+				imag_c[sizei+1] = '\0';
+				//convert
+				mem_cplx[i].real = strtod(real_c, NULL);
+				mem_cplx[i].imaginary = strtod(imag_c, NULL);
+			}
+			else if(strchr(mem_c[i], '+') != NULL)//imag is positive
+			{
+				main_operator = strchr(mem_c[i], '+');
+				i_operator = strchr(mem_c[i], 'i');
+				//Real part
+				sizei = 0;
+				while(mem_c[i] + sizei != main_operator) sizei++;
+				sizet = sizei;
+				memcpy(real_cut, mem_c[i], sizet);
+				real_cut[sizei] = '\0';
+				memcpy(real_c, real_cut, sizet+1);
+				//Imag part
+				sizei = 0;
+				while(main_operator + 1 + sizei != i_operator)sizei++;
+				sizet = sizei;
+				memcpy(imag_c, main_operator+1, sizet);
+				imag_c[sizei] = '\0';
+				//convert
+				mem_cplx[i].real = strtod(real_c, NULL);
+				mem_cplx[i].imaginary = strtod(imag_c, NULL);
+			}
+		}
+	}
 }
