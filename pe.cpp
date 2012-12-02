@@ -156,16 +156,16 @@ void PE_inc::fire()
 void PE_base::set_dest(dim2 l0, dim2 l1, dim2 l2, dim2 l3, dim2 l4, dim2 l5, dim2 l6, dim2 l7)
 {
 	FSM_d[0] = l0;
-	FSM_d[0] = l1;
-	FSM_d[0] = l2;
-	FSM_d[0] = l3;
-	FSM_d[0] = l4;
-	FSM_d[0] = l5;
-	FSM_d[0] = l6;
-	FSM_d[0] = l7;
+	FSM_d[1] = l1;
+	FSM_d[2] = l2;
+	FSM_d[3] = l3;
+	FSM_d[4] = l4;
+	FSM_d[5] = l5;
+	FSM_d[6] = l6;
+	FSM_d[7] = l7;
 }
 
-void PE_base::execute()
+void PE_unit::execute()
 {
 	/* FUNCTION DESCRIPTION
 	Fire PE only when the in queue size is 2. And after execute, the in queue size shall be 0 again;
@@ -187,6 +187,7 @@ void PE_base::execute()
 
 void PE_base::fire()
 {
+	//printf("PE base fired");
 	CPU();
 	//Now I have CPU_out and ALU_out
 	Linker_layer();
@@ -625,6 +626,7 @@ void PE_O::execute()
 
 void PE_O::fire_O()
 {
+	//printf("PO fired");
 	int i;
 	int k;
 	for(i=0; i<8; i++)
@@ -667,6 +669,7 @@ void PE_O::fire_O()
 	for(i=0;i<8;i++)
 	{
 			ofstream myfile("OUTPUT.txt", ios::app);
+			
 			if (fire_out[i].imaginary >= 0)
 			{
 				myfile<<fire_out[i].real << '+' << fire_out[i].imaginary << 'i'<<endl;
@@ -684,17 +687,21 @@ void PE_I::execute()
 {
 	int rm = existing_input%8;
 	int actual = current_input + rm;
-	if (in_queue_.size() == 0 && actual < existing_input)
+	//printf("%d, %d", current_input, actual);
+	//printf("size = %d", out_queue_.size());
+	if (out_queue_.size() == 0 && actual < existing_input)
 	{
 		fire_I();//put 8 cplx into out_queue_
 		current_input += 8;
 
 
 	}
+
 }
 
 void PE_I::fire_I()
 {
+	//printf("PI fired");
 	int i;
 	int k;
 	
@@ -744,9 +751,10 @@ void PE_I::fire_I()
 			printf("invalid index PE_I");
 			break;
 		}
-
+		printf("#%d, %d#", tmp.dest_x, tmp.dest_y);
 		out_queue_.push_back(tmp);
 	}
+	//printf("######################");
 
 }
 
@@ -757,7 +765,7 @@ void PE_I::init()
 	int j;
 	int valid;
 	char tmp[128];
-
+	current_input = 0;
 	existing_input = 0;
 	FILE * pFile;
 	pFile = fopen ("INPUT.txt" , "r");
@@ -908,7 +916,7 @@ void PE_I::init()
 				mem_cplx[i].imaginary = strtod(imag_c, NULL);
 			}
 		}
-		//printf(" ### existing = %d, MAX_INPUT = %d, converted =  %lf+%lfi\n", existing_input, MAX_INPUT, mem_cplx[i].real, mem_cplx[i].imaginary);
+		printf(" ### i = %d, MAX_INPUT = %d, converted =  %lf+%lfi\n", i, MAX_INPUT, mem_cplx[i].real, mem_cplx[i].imaginary);
 	}
 	//printf("#########################\n");
 	free(real_c);
@@ -923,6 +931,11 @@ void PE_I::init()
 }
 
 void PE_unit::init()
+{
+	return;
+}
+
+void PE_O::init()
 {
 	return;
 }

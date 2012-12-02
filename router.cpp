@@ -45,7 +45,7 @@ void router::read_packet(int iport)
 
 	if ((p.src_x == -1) && (p.src_y == -1))
 		return; // empty packet
-
+	//printf("#%d, %d#", p.dest_x, p.dest_y);
 	route_packet_xy(p);
 }
 
@@ -66,8 +66,9 @@ void router::write_packet(int iport)
 
 void router::route_packet_xy(packet p)
 {
+	//printf("#%d, %d#\n", p.dest_x, p.dest_y);
 	if ((p.dest_x == -1) || (p.dest_y == -1))
-	{
+	{   //printf("################################");
 		printf("router (%d,%d): drop packet with invalid destination"
 			" (%d,%d)->(%d,%d)\n",
 			p.src_x, p.src_y, p.dest_x, p.dest_y);
@@ -99,4 +100,10 @@ void router::route_packet_xy(packet p)
 		out_queue_[SOUTH].push_back(p);
 	}
 
+}
+
+dim2::dim2(int a, int b)
+{
+		x = a;
+		y = b;
 }

@@ -12,17 +12,12 @@ struct dim2
 	int x;
 	int y;
 
-	dim2()
+	dim2(): x(-1), y(-1)
 	{
-		x = -1;
-		y = -1;
 	}
 
-	dim2(int a, int b)
-	{
-		x = a;
-		y = b;
-	}
+	dim2(int, int);
+
 };
 
 struct complex_num

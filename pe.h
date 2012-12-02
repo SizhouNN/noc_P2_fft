@@ -41,24 +41,34 @@ protected:
 	int x_, y_; // location of the PE
 
 	virtual void read_input(); // read a packet from the the router
-	virtual void execute(); // abstraction of computations NOT PURE ANY MORE
+	virtual void execute() = 0; // abstraction of computations NOT PURE ANY MORE
 	virtual void write_output(); // // send a packet to the router
 	
 	virtual void fire();
 
 	void Linker_layer();
-	packet linker_out[2];
+	
 
 	void CPU();
-	dim2 CPU_out[2];
+	
 
-	dim2 FSM_d[8];
+	
 
 	//ALU inside PE, specified for Project 2 FFT-DCT
 	complex_num ALU_in[2];
 	complex_num ALU_out[2];
 	void ALU(int);
-
+	
+public : 
+	dim2 CPU_out[2];
+	packet linker_out[2];
+	dim2 FSM_d[8];
+	complex_num mem_cplx[MAX_INPUT];
+	char mem_c[MAX_INPUT][128];
+	int existing_input;
+	int current_input;
+	complex_num fire_out[8];
+	char filename[128];
 }; // PE_base
 
 class PE_unit : public PE_base
@@ -67,7 +77,7 @@ public:
 	PE_unit(const char *name) : PE_base(name) {}
 
 protected:
-
+	void execute();
 	void init();
 };
 
@@ -78,17 +88,13 @@ class PE_I : public PE_base
 public:
 	
 	PE_I(const char *name) : PE_base(name) {}
-	char filename[128];
+	
 	void init();
 
 protected:
 	void execute();
 
-	char mem_c[MAX_INPUT][128];
-	complex_num mem_cplx[MAX_INPUT];
 
-	int existing_input;
-	int current_input;
 	
 	void fire_I();
 
@@ -104,7 +110,7 @@ public:
 
 protected:
 	void execute();
-	complex_num fire_out[8];
+	void init();
 	void fire_O();
 
 }; // class PE_O

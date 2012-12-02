@@ -39,7 +39,7 @@ protected:
 			{	
 				if((i==1&&j==1)||(i==0&&j==0))
 				{
-					printf(" ");
+					printf("");
 				}else
 				{
 					char name[100];
@@ -58,34 +58,35 @@ protected:
 		pes[0][0]->set_xy(0, 0);
 
 		pes[0][0]->init();
+			//for(int i = 0; i <8; i++)printf("%lf ", pes[0][0]->mem_cplx[i].real);
 
 		pes[0][0]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
 			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));
-
+		//for(int i =0;i<8;i++)printf("@%d, %d@", pes[0][0]->FSM_d[i].x, pes[0][0]->FSM_d[i].y);
 		//set up PE_O
 		//layer 4
-		pes[1][1] = new PE_I("PE1_1");
+		pes[1][1] = new PE_O("PE1_1");
 		pes[1][1]->clock(clock);
 		pes[1][1]->set_xy(1, 1);
 
 		//set up PE_unit (s)
 		//layer 1
-		pes[2][2]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
-			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));//green
+		pes[2][2]->set_dest(dim2(0, 2), dim2(2, 0), dim2(0, 2), dim2(2, 0),
+			                dim2(0, 2), dim2(2, 0), dim2(0, 2), dim2(2, 0));//green
 		//layer 2
-		pes[0][2]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
-			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));//green
-		pes[2][0]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
-			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));//blue
+		pes[0][2]->set_dest(dim2(0, 1), dim2(1, 2), dim2(1, 0), dim2(2, 1),
+			                dim2(0, 1), dim2(1, 2), dim2(1, 0), dim2(2, 1));//green
+		pes[2][0]->set_dest(dim2(0, 1), dim2(1, 2), dim2(1, 0), dim2(2, 1),
+			                dim2(0, 1), dim2(1, 2), dim2(1, 0), dim2(2, 1));//blue
 		//layer 3
-		pes[0][1]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
-			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));//green
-		pes[1][0]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
-			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));//orange
-		pes[1][2]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
-			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));//blue
-		pes[2][1]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
-			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));//red
+		pes[0][1]->set_dest(dim2(1, 1), dim2(1, 1), dim2(1, 1), dim2(1, 1),
+			                dim2(1, 1), dim2(1, 1), dim2(1, 1), dim2(1, 1));//green
+		pes[1][0]->set_dest(dim2(1, 1), dim2(1, 1), dim2(1, 1), dim2(1, 1),
+			                dim2(1, 1), dim2(1, 1), dim2(1, 1), dim2(1, 1));//orange
+		pes[1][2]->set_dest(dim2(1, 1), dim2(1, 1), dim2(1, 1), dim2(1, 1),
+			                dim2(1, 1), dim2(1, 1), dim2(1, 1), dim2(1, 1));//blue
+		pes[2][1]->set_dest(dim2(1, 1), dim2(1, 1), dim2(1, 1), dim2(1, 1),
+			                dim2(1, 1), dim2(1, 1), dim2(1, 1), dim2(1, 1));//red
 
 	}
 
@@ -103,13 +104,13 @@ protected:
 				routers[i][j]->set_xy(j,i);
 				routers[i][j]->clock(clock);
 
-				// loop unused ports
+				
 				if(i == 0)
 				{
 					routers[i][j]->port_in[router::NORTH](
-						terminal_loop_north[i]);
+						terminal_loop_north[j]);
 					routers[i][j]->port_out[router::NORTH](
-						terminal_loop_north[i]);
+						terminal_loop_north[j]);
 				}
 				else //connect to NORTH
 				{
@@ -122,9 +123,9 @@ protected:
 				if(i == N-1)
 				{
 					routers[i][j]->port_in[router::SOUTH](
-						terminal_loop_south[i]);
+						terminal_loop_south[j]);
 					routers[i][j]->port_out[router::SOUTH](
-						terminal_loop_south[i]);
+						terminal_loop_south[j]);
 				}
 				else //connect to SOUTH
 				{
@@ -185,7 +186,7 @@ int sc_main(int argc , char *argv[])
 	printf("cycle  0 ================================\n");
 	sc_start(0, SC_NS);
 
-	for(int i = 1; i < 2000; i++){
+	for(int i = 1; i < 100; i++){
 		
 		printf("cycle %2d ================================\n", i);
 
