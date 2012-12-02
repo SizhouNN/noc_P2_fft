@@ -32,6 +32,7 @@ SC_MODULE(PE_base)
 
 	virtual ~PE_base() {}
 
+	virtual void init() = 0;
 protected:
 	std::list<packet> out_queue_; // output queue
 	//packet packet_in_; // incoming packet from the router
@@ -60,11 +61,25 @@ protected:
 
 }; // PE_base
 
+class PE_unit : public PE_base
+{
+public:
+	PE_unit(const char *name) : PE_base(name) {}
+
+protected:
+
+	void init();
+}
+
+
 // for PI and PO
 class PE_I : public PE_base
 {
 public:
+	
 	PE_I(const char *name) : PE_base(name) {}
+	char filename[128];
+	void init();
 
 protected:
 	void execute();
@@ -74,10 +89,10 @@ protected:
 
 	int existing_input;
 	int current_input;
-	char filename[128];
+	
 	void fire_I();
 
-	void init();
+	
 
 }; // class PE_I
 

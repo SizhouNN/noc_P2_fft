@@ -7,15 +7,17 @@
 SC_MODULE(top)
 {
 public:
-	enum {N = 2};
+	enum {M = 3};//x
+	enum {N = 3};//y
 
-	router *routers[N];
-	PE_base *pes[N];
+	router *routers[N][M];
+	PE_base *pes[N][M];
 
-	sc_signal<packet> router_to_pe[N], pe_to_router[N];
-	sc_signal<packet> router_to_router_east[N-1], router_to_router_west[N-1];
-	sc_signal<packet> terminal_loop_north[N], terminal_loop_south[N];
-	sc_signal<packet> terminal_loop_east, terminal_loop_west;
+	sc_signal<packet> router_to_pe[N][M], pe_to_router[N][M];
+	sc_signal<packet> router_to_router_east[N][M-1], router_to_router_west[N][M-1];
+	sc_signal<packet> router_to_router_north[N-1][M], router_to_router_south[N-1][M];
+	sc_signal<packet> terminal_loop_north[M], terminal_loop_south[M];
+	sc_signal<packet> terminal_loop_east[N], terminal_loop_west[N];
 	sc_signal<bool> clock;
 
 	SC_CTOR(top)
@@ -27,73 +29,136 @@ public:
 protected:
 	void create_pes()
 	{
-		pes[0] = new PE_IO("PI/PO");
-		pes[0]->clock(clock);
-		pes[0]->set_xy(0, 0);
+		for (int i = 0; i < N; ++i)
+		{
+			for (int j = 0; j < M; ++j)
+			{	
+				char name[100];
+				sprintf(name, "PE%d_%d", j, i);
+				pes[i][j] = new PE_unit(name);
+				pes[i][j]->clock(clock);
+				pes[i][j]->set_xy(j, i);
+			}
+		}
+		
+		//set up PE_I
+		//layer 0
+		pes[0][0] = new PE_I("PE0_0");
+		pes[0][0]->clock(clock);
+		pes[0][0]->set_xy(0, 0);
+		pes[0][0]->init();
+		pes[0][0]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
+			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));
 
-		pes[1] = new PE_inc("P1");
-		pes[1]->clock(clock);
-		pes[1]->set_xy(1, 0);
+		//set up PE_O
+		//layer 4
+		pes[1][1] = new PE_I("PE1_1");
+		pes[1][1]->clock(clock);
+		pes[1][1]->set_xy(1, 1);
+
+		//set up PE_unit (s)
+		//layer 1
+		pes[2][2]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
+			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));//green
+		//layer 2
+		pes[0][2]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
+			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));//green
+		pes[2][0]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
+			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));//blue
+		//layer 3
+		pes[0][1]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
+			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));//green
+		pes[1][0]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
+			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));//orange
+		pes[1][2]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
+			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));//blue
+		pes[2][1]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
+			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));//red
+
 	}
 
 	void create_network()
 	{
-		for (int i = 0; i < N; ++i)
+		for (int i = 0; i < N; ++i)//define i by N row vertical
 		{
-			char name[100];
-			sprintf(name, "router%d", i);
-
-			// create router
-			routers[i] = new router(name);
-			routers[i]->set_xy(i,0);
-			routers[i]->clock(clock);
-
-			// loop unused ports
-			routers[i]->port_in[router::NORTH](
-				terminal_loop_north[i]);
-			routers[i]->port_out[router::NORTH](
-				terminal_loop_north[i]);
-			routers[i]->port_in[router::SOUTH](
-				terminal_loop_south[i]);
-			routers[i]->port_out[router::SOUTH](
-				terminal_loop_south[i]);
-
-			// connect router to west routers
-			if (i != 0)
+			for (int j = 0; j < M; ++j) //define j by M column horizontal
 			{
-				routers[i]->port_out[router::WEST](
-					router_to_router_west[i-1]);
-				routers[i]->port_in[router::WEST](
-					router_to_router_east[i-1]);
-			}
-			else // or make a loop
-			{
-				routers[i]->port_out[router::WEST](
-					terminal_loop_west);
-				routers[i]->port_in[router::WEST](
-					terminal_loop_west);
-			}
+				char name[100];
+				sprintf(name, "router%d_%d", j, i);
 
-			if (i != N-1) // connect router to east routers
-			{
-				routers[i]->port_out[router::EAST](
-					router_to_router_east[i]);
-				routers[i]->port_in[router::EAST](
-					router_to_router_west[i]);
-			}
-			else // or make a loop
-			{
-				routers[i]->port_out[router::EAST](
-					terminal_loop_east);
-				routers[i]->port_in[router::EAST](
-					terminal_loop_east);
-			}
+				// create router
+				routers[i][j] = new router(name);
+				routers[i][j]->set_xy(j,i);
+				routers[i][j]->clock(clock);
 
-			// connect router to PE
-			routers[i]->port_out[router::PE](router_to_pe[i]);
-			routers[i]->port_in[router::PE](pe_to_router[i]);
-			pes[i]->data_in(router_to_pe[i]);
-			pes[i]->data_out(pe_to_router[i]);
+				// loop unused ports
+				if(i == 0)
+				{
+					routers[i][j]->port_in[router::NORTH](
+						terminal_loop_north[i]);
+					routers[i][j]->port_out[router::NORTH](
+						terminal_loop_north[i]);
+				}
+				else //connect to NORTH
+				{
+					routers[i][j]->port_out[router::NORTH](
+						router_to_router_north[i-1][j]);
+					routers[i][j]->port_in[router::NORTH](
+						router_to_router_south[i-1][j]);
+				}
+
+				if(i == N-1)
+				{
+					routers[i][j]->port_in[router::SOUTH](
+						terminal_loop_south[i]);
+					routers[i][j]->port_out[router::SOUTH](
+						terminal_loop_south[i]);
+				}
+				else //connect to SOUTH
+				{
+					routers[i][j]->port_out[router::SOUTH](
+						router_to_router_south[i][j]);
+					routers[i][j]->port_in[router::SOUTH](
+						router_to_router_north[i][j]);
+				}
+
+				// connect router to west routers
+				if (j != 0)
+				{
+					routers[i][j]->port_out[router::WEST](
+						router_to_router_west[i][j-1]);
+					routers[i][j]->port_in[router::WEST](
+						router_to_router_east[i][j-1]);
+				}
+				else // or make a loop
+				{
+					routers[i][j]->port_out[router::WEST](
+						terminal_loop_west[i]);
+					routers[i][j]->port_in[router::WEST](
+						terminal_loop_west[i]);
+				}
+
+				if (j != M-1) // connect router to east routers
+				{
+					routers[i][j]->port_out[router::EAST](
+						router_to_router_east[i][j]);
+					routers[i][j]->port_in[router::EAST](
+						router_to_router_west[i][j]);
+				}
+				else // or make a loop
+				{
+					routers[i][j]->port_out[router::EAST](
+						terminal_loop_east[i]);
+					routers[i][j]->port_in[router::EAST](
+						terminal_loop_east[i]);
+				}
+
+				// connect router to PE
+				routers[i][j]->port_out[router::PE](router_to_pe[i][j]);
+				routers[i][j]->port_in[router::PE](pe_to_router[i][j]);
+				pes[i][j]->data_in(router_to_pe[i][j]);
+				pes[i][j]->data_out(pe_to_router[i][j]);
+			}
 		}
 	}
 

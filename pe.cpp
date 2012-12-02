@@ -363,56 +363,56 @@ void PE_base::CPU()
 			ALU_in[1] = in_queue_.back().cplx_n;
 			ALU(0);
 			CPU_out[0] = FSM_d[0];
-			CPU_out[1] = FSM_d[1];
+			CPU_out[1] = FSM_d[2];
 			break;
 		case 1:
 			ALU_in[0] = in_queue_.front().cplx_n;
 			ALU_in[1] = in_queue_.back().cplx_n;
 			ALU(0);
-			CPU_out[0] = FSM_d[2];
-			CPU_out[1] = FSM_d[3];
+			CPU_out[0] = FSM_d[4];
+			CPU_out[1] = FSM_d[6];
 			break;
 		case 2:
 			ALU_in[0] = in_queue_.front().cplx_n;
 			ALU_in[1] = in_queue_.back().cplx_n;
 			ALU(0);
-			CPU_out[0] = FSM_d[0];
-			CPU_out[1] = FSM_d[1];
+			CPU_out[0] = FSM_d[1];
+			CPU_out[1] = FSM_d[3];
 			break;
 		case 3:
 			ALU_in[0] = in_queue_.front().cplx_n;
 			ALU_in[1] = in_queue_.back().cplx_n;
 			ALU(0);
-			CPU_out[0] = FSM_d[2];
-			CPU_out[1] = FSM_d[3];
+			CPU_out[0] = FSM_d[5];
+			CPU_out[1] = FSM_d[7];
 			break;
 		case 4:
 			ALU_in[1] = in_queue_.front().cplx_n;
 			ALU_in[0] = in_queue_.back().cplx_n;
 			ALU(0);
 			CPU_out[0] = FSM_d[0];
-			CPU_out[1] = FSM_d[1];
+			CPU_out[1] = FSM_d[2];
 			break;
 		case 5:
 			ALU_in[1] = in_queue_.front().cplx_n;
 			ALU_in[0] = in_queue_.back().cplx_n;
 			ALU(0);
-			CPU_out[0] = FSM_d[2];
-			CPU_out[1] = FSM_d[3];
+			CPU_out[0] = FSM_d[4];
+			CPU_out[1] = FSM_d[6];
 			break;
 		case 6:
 			ALU_in[1] = in_queue_.front().cplx_n;
 			ALU_in[0] = in_queue_.back().cplx_n;
 			ALU(0);
-			CPU_out[0] = FSM_d[0];
-			CPU_out[1] = FSM_d[1];
+			CPU_out[0] = FSM_d[1];
+			CPU_out[1] = FSM_d[3];
 			break;
 		case 7:
 			ALU_in[1] = in_queue_.front().cplx_n;
 			ALU_in[0] = in_queue_.back().cplx_n;
 			ALU(0);
-			CPU_out[0] = FSM_d[2];
-			CPU_out[1] = FSM_d[3];
+			CPU_out[0] = FSM_d[5];
+			CPU_out[1] = FSM_d[7];
 			break;
 		default:
 			printf("Impossible Index\n");
@@ -427,56 +427,56 @@ void PE_base::CPU()
 			ALU_in[1] = in_queue_.back().cplx_n;
 			ALU(0);
 			CPU_out[0] = FSM_d[0];
-			CPU_out[1] = FSM_d[2];
+			CPU_out[1] = FSM_d[4];
 			break;
 		case 1:
 			ALU_in[0] = in_queue_.front().cplx_n;
 			ALU_in[1] = in_queue_.back().cplx_n;
 			ALU(2);
-			CPU_out[0] = FSM_d[1];
-			CPU_out[1] = FSM_d[3];
+			CPU_out[0] = FSM_d[2];
+			CPU_out[1] = FSM_d[6];
 			break;
 		case 2:
 			ALU_in[1] = in_queue_.front().cplx_n;
 			ALU_in[0] = in_queue_.back().cplx_n;
 			ALU(0);
 			CPU_out[0] = FSM_d[0];
-			CPU_out[1] = FSM_d[2];
+			CPU_out[1] = FSM_d[4];
 			break;
 		case 3:
 			ALU_in[1] = in_queue_.front().cplx_n;
 			ALU_in[0] = in_queue_.back().cplx_n;
 			ALU(2);
-			CPU_out[0] = FSM_d[1];
-			CPU_out[1] = FSM_d[3];
+			CPU_out[0] = FSM_d[2];
+			CPU_out[1] = FSM_d[6];
 			break;
 		case 4:
 			ALU_in[0] = in_queue_.front().cplx_n;
 			ALU_in[1] = in_queue_.back().cplx_n;
 			ALU(0);
-			CPU_out[0] = FSM_d[0];
-			CPU_out[1] = FSM_d[2];
+			CPU_out[0] = FSM_d[1];
+			CPU_out[1] = FSM_d[5];
 			break;
 		case 5:
 			ALU_in[0] = in_queue_.front().cplx_n;
 			ALU_in[1] = in_queue_.back().cplx_n;
 			ALU(2);
-			CPU_out[0] = FSM_d[1];
-			CPU_out[1] = FSM_d[3];
+			CPU_out[0] = FSM_d[3];
+			CPU_out[1] = FSM_d[7];
 			break;
 		case 6:
 			ALU_in[1] = in_queue_.front().cplx_n;
 			ALU_in[0] = in_queue_.back().cplx_n;
 			ALU(0);
-			CPU_out[0] = FSM_d[0];
-			CPU_out[1] = FSM_d[2];
+			CPU_out[0] = FSM_d[1];
+			CPU_out[1] = FSM_d[5];
 			break;
 		case 7:
 			ALU_in[1] = in_queue_.front().cplx_n;
 			ALU_in[0] = in_queue_.back().cplx_n;
 			ALU(2);
-			CPU_out[0] = FSM_d[1];
-			CPU_out[1] = FSM_d[3];
+			CPU_out[0] = FSM_d[3];
+			CPU_out[1] = FSM_d[7];
 			break; 
 		default:
 			printf("Impossible Index\n");
@@ -630,7 +630,36 @@ void PE_O::fire_O()
 	for(i=0; i<8; i++)
 	{
 		k = in_queue_.front().info.index;
-		fire_out[k] = in_queue_.front().cplx_n;
+		switch(k)
+		{
+		case 0:
+			fire_out[0] = in_queue_.front().cplx_n;
+			break;
+		case 1:
+			fire_out[4] = in_queue_.front().cplx_n;
+			break;
+		case 2:
+			fire_out[1] = in_queue_.front().cplx_n;
+			break;
+		case 3:
+			fire_out[5] = in_queue_.front().cplx_n;
+			break;
+		case 4:
+			fire_out[2] = in_queue_.front().cplx_n;
+			break;
+		case 5:
+			fire_out[6] = in_queue_.front().cplx_n;
+			break;
+		case 6:
+			fire_out[3] = in_queue_.front().cplx_n;
+			break;
+		case 7:
+			fire_out[7] = in_queue_.front().cplx_n;
+			break;
+
+		}
+		
+		
 		
 		in_queue_.pop_front();
 	}
@@ -727,7 +756,7 @@ void PE_I::init()
 	int i;
 	existing_input = 0;
 	FILE * pFile;
-	pFile = fopen (filename , "r");
+	pFile = fopen ("INPUT.txt" , "r");
 	if (pFile == NULL) printf ("Error opening file %s.\n", filename);
 	else
 	{
