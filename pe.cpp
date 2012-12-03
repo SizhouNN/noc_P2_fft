@@ -574,7 +574,7 @@ void PE_I::execute()
 	//printf("size = %d", out_queue_.size());
 	if (out_queue_.size() == 0 && actual < existing_input)
 	{
-		fire_I2();
+		fire_I();
 		//fire_I();//put 8 cplx into out_queue_
 		current_input += 8;
 
@@ -659,7 +659,7 @@ void PE_I::fire_I()
 		//printf("PE_I: #%d, %d#\n", tmp.dest_x, tmp.dest_y);
 		printf("PE_I: #%lf, %lf#\n", tmp.cplx_n.real, tmp.cplx_n.imaginary);
 		out_queue_.push_back(tmp);
-		printf("outqueue size = %d\n", out_queue_.size());
+		//printf("outqueue size = %d\n", out_queue_.size());
 	}
 	//printf("######################");
 

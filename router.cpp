@@ -49,7 +49,7 @@ void router::read_packet(int iport)
 		return; // empty packet
 	}
 
-	//printf("ROUTER%d_%d port%d: #%lf, %lf#\n", x_, y_, iport, port_in[iport].read().cplx_n.real, port_in[iport].read().cplx_n.imaginary);
+	printf("ROUTER%d_%d port%d: #%lf, %lf#\n", x_, y_, iport, port_in[iport].read().cplx_n.real, port_in[iport].read().cplx_n.imaginary);
 	//printf("ROUTER%d_%d port%d: #%lf, %lf#, (%d, %d), (%d)\n", x_, y_, iport, packet_in_.cplx_n.real, packet_in_.cplx_n.imaginary, packet_in_.dest_x, packet_in_.dest_y, packet_in_.info.index);
 
 	route_packet_xy(packet_in_);

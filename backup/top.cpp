@@ -58,7 +58,7 @@ protected:
 		pes[0][0]->set_xy(0, 0);
 
 		pes[0][0]->init();
-			//for(int i = 0; i <8; i++)printf("%lf ", pes[0][0]->mem_cplx[i].real);
+		//for(int i = 0; i <8; i++)printf("%lf ", pes[0][0]->mem_cplx[i].real);
 
 		pes[0][0]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
 			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));
@@ -179,14 +179,14 @@ protected:
 
 int sc_main(int argc , char *argv[])
 {
-	srand(0);
+	//srand(0);
 
 	top top_module("top");
 	printf("FINISHED TOP CONSTRUCTOR");
 
-	sc_trace_file *tf = sc_create_vcd_trace_file("TRACEFILE");
-	sc_trace(tf, top_module.pe_to_router[0][0], "pe_to_router00");
-	sc_trace(tf, top_module.clock, "clock");
+	//sc_trace_file *tf = sc_create_vcd_trace_file("TRACEFILE");
+	//sc_trace(tf, top_module.pe_to_router[0][0], "pe_to_router00");
+	//sc_trace(tf, top_module.clock, "clock");
 
 
 
@@ -202,7 +202,7 @@ int sc_main(int argc , char *argv[])
 		top_module.clock.write(0);
 		sc_start(10, SC_NS);
 	}
-	sc_close_vcd_trace_file(tf);
+	//sc_close_vcd_trace_file(tf);
 
 	return 0;
 }
