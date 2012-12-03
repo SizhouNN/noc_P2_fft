@@ -48,8 +48,7 @@ void router::read_packet(int iport)
 	{
 		return; // empty packet
 	}
-	if(x_==1 && y_==1 && packet_in_.dest_x ==1 &&packet_in_.dest_y==1)
-		printf("PO got a packet: %lf, %lf\n", packet_in_.cplx_n.real, packet_in_.cplx_n.imaginary);
+	//if(x_==1 && y_==1 && packet_in_.dest_x ==1 &&packet_in_.dest_y==1)printf("PO got a packet: %lf, %lf\n", packet_in_.cplx_n.real, packet_in_.cplx_n.imaginary);
 	//printf("ROUTER%d_%d port%d: #%lf, %lf#\n", x_, y_, iport, port_in[iport].read().cplx_n.real, port_in[iport].read().cplx_n.imaginary);
 	//printf("ROUTER%d_%d port%d: #%lf, %lf#, (%d, %d), (%d)\n", x_, y_, iport, packet_in_.cplx_n.real, packet_in_.cplx_n.imaginary, packet_in_.dest_x, packet_in_.dest_y, packet_in_.info.index);
 

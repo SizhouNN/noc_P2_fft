@@ -182,18 +182,29 @@ int sc_main(int argc , char *argv[])
 	//srand(0);
 
 	top top_module("top");
-
+	int runtime;
 
 	//sc_trace_file *tf = sc_create_vcd_trace_file("TRACEFILE");
 	//sc_trace(tf, top_module.pe_to_router[0][0], "pe_to_router00");
 	//sc_trace(tf, top_module.clock, "clock");
-
+	//Banner
+	printf("*********************************************\n");
+	printf("*             ECE 587  Fall 2012            *\n");
+	printf("*                  Project 2                *\n");
+	printf("*                                           *\n");
+	printf("*    Sizhou Wang A20249772                  *\n");
+	printf("*    Thank You !                            *\n");
+	printf("*********************************************\n");
+	printf("\n  input = INPUT.txt");
+	printf("\n output = OUTPUT.txt");
+	printf("\nPlease enter the number of cycles to run >>>");
+	scanf("%d", &runtime);
 
 
 	printf("cycle  0 ================================\n");
 	sc_start(0, SC_NS);
 
-	for(int i = 1; i < 40; i++){
+	for(int i = 1; i < runtime; i++){
 	
 		printf("cycle %2d ================================\n", i);
 
