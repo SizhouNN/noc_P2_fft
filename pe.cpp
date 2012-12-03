@@ -698,7 +698,7 @@ void PE_I::execute()
 	//printf("size = %d", out_queue_.size());
 	if (out_queue_.size() == 0 && actual < existing_input)
 	{
-		fire_I();
+		fire_I2();
 		//fire_I();//put 8 cplx into out_queue_
 		current_input += 8;
 
