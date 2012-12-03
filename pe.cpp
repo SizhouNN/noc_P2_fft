@@ -24,8 +24,10 @@ void PE_base::write_output()
 	}
 	else
 	{
+		printf("PE_base%d_%d write: #%lf, %lf#\n", x_, y_, out_queue_.front().cplx_n.real, out_queue_.front().cplx_n.imaginary);
 		data_out.write(out_queue_.front());
 		out_queue_.pop_front();
+		//printf("PE_base%d_%d next : #%lf, %lf#\n", x_, y_, out_queue_.front().cplx_n.real, out_queue_.front().cplx_n.imaginary);
 	}
 }
 /*
@@ -191,9 +193,10 @@ void PE_base::fire()
 	CPU();
 	//Now I have CPU_out and ALU_out
 	Linker_layer();
+	//printf("OUT0 = %lf, %lf\n", linker_out[1].cplx_n.real, linker_out[1].cplx_n.imaginary);
 	out_queue_.push_back(linker_out[0]);
 	out_queue_.push_back(linker_out[1]);
-	
+	//printf("front: %lf, %lf\n", out_queue_.back().cplx_n.real, out_queue_.back().cplx_n.imaginary);
 	
 }
 
@@ -202,6 +205,7 @@ void PE_base::Linker_layer()
 	int i;
 	for (i = 0; i<2;i++)
 	{
+		//printf("OUT0_ALU = %lf, %lf\n", ALU_out[i].real, ALU_out[i].imaginary);
 		linker_out[i].cplx_n = ALU_out[i];
 		linker_out[i].src_x = x_;
 		linker_out[i].src_y = y_;
@@ -351,7 +355,8 @@ void PE_base::CPU()
 {
 	assert(!in_queue_.empty());
 	assert(in_queue_.size() == 2);
-
+	//printf("ALU_IN0 = %lf, %lf\n", in_queue_.front().cplx_n.real, in_queue_.front().cplx_n.imaginary);
+	//printf("ALU_IN1 = %lf, %lf\n", in_queue_.back().cplx_n.real, in_queue_.back().cplx_n.imaginary);
 	packet tmp = in_queue_.front();
 
 	switch (tmp.info.layer)
@@ -594,7 +599,8 @@ void PE_base::ALU(int powerOfw)
 		ALU_out[1] = ALU_in[0] - ALU_in[1] * w3;
 		break;
 	}
-	
+	//printf("ANS0 = %lf, %lf\n", ALU_out[0].real, ALU_out[0].imaginary);
+	//printf("ANS1 = %lf, %lf\n", ALU_out[1].real, ALU_out[1].imaginary);
 }
 
 //void PE_green::linkLayer()
@@ -631,6 +637,7 @@ void PE_O::fire_O()
 	int k;
 	for(i=0; i<8; i++)
 	{
+		//printf("front: %lf, %lf\n", in_queue_.back().cplx_n.real, in_queue_.back().cplx_n.imaginary);
 		k = in_queue_.front().info.index;
 		switch(k)
 		{
@@ -660,7 +667,7 @@ void PE_O::fire_O()
 			break;
 
 		}
-		
+		//printf("fire_out5: %lf, %lf\n", fire_out[5].real, fire_out[5].imaginary);
 		
 		
 		in_queue_.pop_front();
@@ -691,7 +698,8 @@ void PE_I::execute()
 	//printf("size = %d", out_queue_.size());
 	if (out_queue_.size() == 0 && actual < existing_input)
 	{
-		fire_I();//put 8 cplx into out_queue_
+		fire_I();
+		//fire_I();//put 8 cplx into out_queue_
 		current_input += 8;
 
 
@@ -699,11 +707,32 @@ void PE_I::execute()
 
 }
 
+void PE_I::fire_I2()
+{
+	for (int i = 0;i < 8;i++)
+	{
+		current_input = 0;
+		pd[current_input].cplx_n.real = i;
+
+		pd[current_input].cplx_n.imaginary = i;
+		pd[current_input].dest_x = 2;
+		pd[current_input].dest_y = 2;
+		pd[current_input].src_x = 0;
+		pd[current_input].dest_y = 0;
+		pd[current_input].info.layer = 0;
+		pd[current_input].info.index = i;
+		pd[current_input].token = 1;
+		
+		out_queue_.push_back(pd[current_input]);
+		
+	}
+}
+
 void PE_I::fire_I()
 {
 	//printf("PI fired");
 	int i;
-	int k;
+	
 	
 	packet tmp;
 	tmp.info.layer = 0;
@@ -751,8 +780,10 @@ void PE_I::fire_I()
 			printf("invalid index PE_I");
 			break;
 		}
-		printf("#%d, %d#", tmp.dest_x, tmp.dest_y);
+		//printf("PE_I: #%d, %d#\n", tmp.dest_x, tmp.dest_y);
+		printf("PE_I: #%lf, %lf#\n", tmp.cplx_n.real, tmp.cplx_n.imaginary);
 		out_queue_.push_back(tmp);
+		printf("outqueue size = %d\n", out_queue_.size());
 	}
 	//printf("######################");
 
@@ -761,6 +792,7 @@ void PE_I::fire_I()
 void PE_I::init()
 {
 	//#-1 read file into char array of 1024 line by line
+	char mem_c[MAX_INPUT][128];
 	int i;
 	int j;
 	int valid;
@@ -772,7 +804,7 @@ void PE_I::init()
 
 	if (pFile == NULL) 
 	{
-		printf ("Error opening file %s.\n", filename);
+		printf ("Error opening file %s.\n");
 	}
 	else
 	{
@@ -797,6 +829,7 @@ void PE_I::init()
 				//printf(" ### existing = %d, string =  %s\n", existing_input, mem_c[i]);
 			}
 		}
+		fclose(pFile);
        
 	}
 	
@@ -927,7 +960,7 @@ void PE_I::init()
 	//printf("#########################\n");
 	free(imag_c);
 	//printf("#########################\n");
-	
+	return;
 }
 
 void PE_unit::init()

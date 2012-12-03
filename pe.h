@@ -55,30 +55,34 @@ protected:
 	
 
 	//ALU inside PE, specified for Project 2 FFT-DCT
-	complex_num ALU_in[2];
-	complex_num ALU_out[2];
+
 	void ALU(int);
 	
 public : 
+	
+	packet pd[1024];
+	
+	complex_num ALU_in[2];
+	complex_num ALU_out[2];
 	dim2 CPU_out[2];
 	packet linker_out[2];
 	dim2 FSM_d[8];
 	complex_num mem_cplx[MAX_INPUT];
-	char mem_c[MAX_INPUT][128];
+	//char mem_c[MAX_INPUT][128];
 	int existing_input;
 	int current_input;
 	complex_num fire_out[8];
-	char filename[128];
+	//char filename[128];
 }; // PE_base
 
 class PE_unit : public PE_base
 {
 public:
 	PE_unit(const char *name) : PE_base(name) {}
-
+	void init();
 protected:
 	void execute();
-	void init();
+
 };
 
 
@@ -95,7 +99,7 @@ protected:
 	void execute();
 
 
-	
+	void fire_I2();
 	void fire_I();
 
 	
@@ -107,10 +111,10 @@ class PE_O : public PE_base
 {
 public:
 	PE_O(const char *name) : PE_base(name) {}
-
+	void init();
 protected:
 	void execute();
-	void init();
+	
 	void fire_O();
 
 }; // class PE_O

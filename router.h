@@ -71,10 +71,13 @@ struct packet
 	
 	complex_num cplx_n;
 	data_info info;
+
 	packet(int sx = -1, int sy = -1, int dx = -1, int dy = -1,
 		token_type t = token_type())
-		: src_x(sx), src_y(sy), dest_x(dx), dest_y(dy), token(t)
+		: src_x(sx), src_y(sy), dest_x(dx), dest_y(dy), token(t), cplx_n(complex_num())
 	{
+		info.index = -1;
+		info.layer = -1;
 	}
 
 	bool operator==(const packet &x) const
@@ -110,9 +113,9 @@ SC_MODULE(router)
 
 protected:
 	std::list<packet> out_queue_[PORTS]; // output queues
-
+	packet packet_in_;
 	int x_, y_; // location of the router
-
+	
 	void read_packet(int iport); // read a packet from the link
 	void write_packet(int iport); // write a packet to the link
 	void route_packet_xy(packet p); // route the packet to the output queue

@@ -32,7 +32,7 @@ void router::set_xy(int x, int y)
 {
 	assert((x_ == -1) && (y_ == -1)); // set once only
 	assert((x != -1) && (y != -1)); // must use a legal location
-
+	
 	x_ = x;
 	y_ = y;
 }
@@ -41,12 +41,18 @@ void router::read_packet(int iport)
 {
 	assert(iport < PORTS);
 
-	packet p = port_in[iport].read();
+	packet_in_ = port_in[iport].read();
+	
 
-	if ((p.src_x == -1) && (p.src_y == -1))
+	if ((packet_in_.src_x == -1) && (packet_in_.src_y == -1))
+	{
 		return; // empty packet
-	//printf("#%d, %d#", p.dest_x, p.dest_y);
-	route_packet_xy(p);
+	}
+
+	//printf("ROUTER%d_%d port%d: #%lf, %lf#\n", x_, y_, iport, port_in[iport].read().cplx_n.real, port_in[iport].read().cplx_n.imaginary);
+	printf("ROUTER%d_%d port%d: #%lf, %lf#, (%d, %d), (%d)\n", x_, y_, iport, packet_in_.cplx_n.real, packet_in_.cplx_n.imaginary, packet_in_.dest_x, packet_in_.dest_y, packet_in_.info.index);
+
+	route_packet_xy(packet_in_);
 }
 
 void router::write_packet(int iport)
