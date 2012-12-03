@@ -58,7 +58,7 @@ protected:
 		pes[0][0]->set_xy(0, 0);
 
 		pes[0][0]->init();
-			//for(int i = 0; i <8; i++)printf("%lf ", pes[0][0]->mem_cplx[i].real);
+		//for(int i = 0; i <8; i++)printf("%lf ", pes[0][0]->mem_cplx[i].real);
 
 		pes[0][0]->set_dest(dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2),
 			                dim2(2, 2), dim2(2, 2), dim2(2, 2), dim2(2, 2));

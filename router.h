@@ -113,12 +113,14 @@ SC_MODULE(router)
 
 protected:
 	std::list<packet> out_queue_[PORTS]; // output queues
-	packet packet_in_;
+	
 	int x_, y_; // location of the router
 	
 	void read_packet(int iport); // read a packet from the link
 	void write_packet(int iport); // write a packet to the link
 	void route_packet_xy(packet p); // route the packet to the output queue
+private:
+	//packet packet_in_;
 }; // router
 
 #endif // ROUTER_H

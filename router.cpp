@@ -20,7 +20,7 @@ void sc_trace(sc_trace_file *tf, const packet &p, const std::string &name)
 void router::main()
 {
 	assert((x_ != -1) && (y_ != -1)); // to identify PE
-
+	//printf("ROUTER ACT %d %d\n", x_, y_);
 	for (int iport = 0; iport < PORTS; ++iport)
 		read_packet(iport);
 
@@ -41,7 +41,7 @@ void router::read_packet(int iport)
 {
 	assert(iport < PORTS);
 
-	packet_in_ = port_in[iport].read();
+	packet packet_in_ = port_in[iport].read();
 	
 
 	if ((packet_in_.src_x == -1) && (packet_in_.src_y == -1))
@@ -50,7 +50,7 @@ void router::read_packet(int iport)
 	}
 
 	//printf("ROUTER%d_%d port%d: #%lf, %lf#\n", x_, y_, iport, port_in[iport].read().cplx_n.real, port_in[iport].read().cplx_n.imaginary);
-	printf("ROUTER%d_%d port%d: #%lf, %lf#, (%d, %d), (%d)\n", x_, y_, iport, packet_in_.cplx_n.real, packet_in_.cplx_n.imaginary, packet_in_.dest_x, packet_in_.dest_y, packet_in_.info.index);
+	//printf("ROUTER%d_%d port%d: #%lf, %lf#, (%d, %d), (%d)\n", x_, y_, iport, packet_in_.cplx_n.real, packet_in_.cplx_n.imaginary, packet_in_.dest_x, packet_in_.dest_y, packet_in_.info.index);
 
 	route_packet_xy(packet_in_);
 }
