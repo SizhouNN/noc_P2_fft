@@ -71,13 +71,13 @@ protected:
 
 		//set up PE_unit (s)
 		//layer 1
-		pes[2][2]->set_dest(dim2(0, 2), dim2(2, 0), dim2(0, 2), dim2(2, 0),
-			                dim2(0, 2), dim2(2, 0), dim2(0, 2), dim2(2, 0));//green
+		pes[2][2]->set_dest(dim2(2, 0), dim2(2, 0), dim2(0, 2), dim2(0, 2),
+			                dim2(2, 0), dim2(2, 0), dim2(0, 2), dim2(0, 2));//green
 		//layer 2
-		pes[0][2]->set_dest(dim2(0, 1), dim2(1, 2), dim2(1, 0), dim2(2, 1),
-			                dim2(0, 1), dim2(1, 2), dim2(1, 0), dim2(2, 1));//green
-		pes[2][0]->set_dest(dim2(0, 1), dim2(1, 2), dim2(1, 0), dim2(2, 1),
-			                dim2(0, 1), dim2(1, 2), dim2(1, 0), dim2(2, 1));//blue
+		pes[0][2]->set_dest(dim2(1, 0), dim2(1, 0), dim2(0, 1), dim2(0, 1),
+			                dim2(2, 1), dim2(2, 1), dim2(1, 2), dim2(1, 2));//green
+		pes[2][0]->set_dest(dim2(1, 0), dim2(1, 0), dim2(0, 1), dim2(0, 1),
+			                dim2(2, 1), dim2(2, 1), dim2(1, 2), dim2(1, 2));//blue
 		//layer 3
 		pes[0][1]->set_dest(dim2(1, 1), dim2(1, 1), dim2(1, 1), dim2(1, 1),
 			                dim2(1, 1), dim2(1, 1), dim2(1, 1), dim2(1, 1));//green
@@ -182,7 +182,7 @@ int sc_main(int argc , char *argv[])
 	//srand(0);
 
 	top top_module("top");
-	printf("FINISHED TOP CONSTRUCTOR");
+
 
 	//sc_trace_file *tf = sc_create_vcd_trace_file("TRACEFILE");
 	//sc_trace(tf, top_module.pe_to_router[0][0], "pe_to_router00");
@@ -193,7 +193,7 @@ int sc_main(int argc , char *argv[])
 	printf("cycle  0 ================================\n");
 	sc_start(0, SC_NS);
 
-	for(int i = 1; i < 20; i++){
+	for(int i = 1; i < 40; i++){
 	
 		printf("cycle %2d ================================\n", i);
 

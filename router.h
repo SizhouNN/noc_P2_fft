@@ -84,7 +84,7 @@ struct packet
 	{
 		return (x.src_x == src_x) && (x.src_y == src_y)
 			&& (x.dest_x == dest_x) && (x.dest_y == dest_y)
-			&& (x.token == token);
+			&& (x.token == token) && (x.cplx_n.real == cplx_n.real) && (x.cplx_n.imaginary == cplx_n.imaginary) && (x.info.index == info.index) && (x.info.layer == info.layer);
 	}
 }; // struct packet
 

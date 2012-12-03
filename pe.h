@@ -2,7 +2,7 @@
 #define PE_H
 
 #include "router.h"
-#define MAX_INPUT 1024
+#define MAX_INPUTS 1024
 
 SC_MODULE(PE_base)
 {
@@ -67,7 +67,7 @@ public :
 	dim2 CPU_out[2];
 	packet linker_out[2];
 	dim2 FSM_d[8];
-	complex_num mem_cplx[MAX_INPUT];
+	complex_num mem_cplx[MAX_INPUTS];
 	//char mem_c[MAX_INPUT][128];
 	int existing_input;
 	int current_input;

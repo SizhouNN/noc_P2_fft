@@ -24,7 +24,13 @@ void PE_base::write_output()
 	}
 	else
 	{
-		printf("PE_base%d_%d write: #%lf, %lf#\n", x_, y_, out_queue_.front().cplx_n.real, out_queue_.front().cplx_n.imaginary);
+		if(x_==2&&y_==2)
+		{
+			//printf("PE22: (%d,%d)&(%d,%d) %d\n", out_queue_.front().dest_x,out_queue_.front().dest_y,out_queue_.back().dest_x,out_queue_.back().dest_y, out_queue_.size());
+		}
+
+
+		//printf("PE_base%d_%d write: #%lf, %lf#\n", x_, y_, out_queue_.front().cplx_n.real, out_queue_.front().cplx_n.imaginary);
 		data_out.write(out_queue_.front());
 		out_queue_.pop_front();
 		//printf("PE_base%d_%d next : #%lf, %lf#\n", x_, y_, out_queue_.front().cplx_n.real, out_queue_.front().cplx_n.imaginary);
@@ -65,7 +71,7 @@ void PE_unit::execute()
 
 void PE_base::fire()
 {
-	//printf("PE base fired");
+	printf("  PE%d_%d fired\n", x_, y_);
 	CPU();
 	//Now I have CPU_out and ALU_out
 	Linker_layer();
@@ -508,12 +514,12 @@ void PE_O::execute()
 
 void PE_O::fire_O()
 {
-	//printf("PO fired");
+	//printf("PO fired\n");
 	int i;
 	int k;
 	for(i=0; i<8; i++)
 	{
-		//printf("front: %lf, %lf\n", in_queue_.back().cplx_n.real, in_queue_.back().cplx_n.imaginary);
+		//printf("front: %lf, %lf INDEX:%d (%d)\n", in_queue_.front().cplx_n.real, in_queue_.front().cplx_n.imaginary, in_queue_.front().info.index, in_queue_.front().info.layer);
 		k = in_queue_.front().info.index;
 		switch(k)
 		{
@@ -541,6 +547,9 @@ void PE_O::fire_O()
 		case 7:
 			fire_out[7] = in_queue_.front().cplx_n;
 			break;
+		default:
+			printf("IMPOSSIBLE INDEX");
+			break;
 
 		}
 		//printf("fire_out5: %lf, %lf\n", fire_out[5].real, fire_out[5].imaginary);
@@ -548,11 +557,15 @@ void PE_O::fire_O()
 		
 		in_queue_.pop_front();
 	}
+	for (i=0;i<8;i++)printf("Write to file: %lf, %lf \n", fire_out[i].real,  fire_out[i].imaginary);
 
+	ofstream myfile("OUTPUT.txt", ios::app);
+			
 	for(i=0;i<8;i++)
 	{
-			ofstream myfile("OUTPUT.txt", ios::app);
 			
+			
+
 			if (fire_out[i].imaginary >= 0)
 			{
 				myfile<<fire_out[i].real << '+' << fire_out[i].imaginary << 'i'<<endl;
@@ -560,9 +573,9 @@ void PE_O::fire_O()
 			{
 				myfile<<fire_out[i].real <<  fire_out[i].imaginary << 'i'<<endl;
 			}
-			myfile.close();
+			
 	}
-
+	myfile.close();
 
 }
 
@@ -657,7 +670,7 @@ void PE_I::fire_I()
 			break;
 		}
 		//printf("PE_I: #%d, %d#\n", tmp.dest_x, tmp.dest_y);
-		printf("PE_I: #%lf, %lf#\n", tmp.cplx_n.real, tmp.cplx_n.imaginary);
+		printf("PE_I: #%lf, %lf#, INDEX:%d(%d)->(%d, %d)\n", tmp.cplx_n.real, tmp.cplx_n.imaginary, tmp.info.index, tmp.info.layer, tmp.dest_x, tmp.dest_y);
 		out_queue_.push_back(tmp);
 		//printf("outqueue size = %d\n", out_queue_.size());
 	}
@@ -668,7 +681,7 @@ void PE_I::fire_I()
 void PE_I::init()
 {
 	//#-1 read file into char array of 1024 line by line
-	char mem_c[MAX_INPUT][128];
+	char mem_c[MAX_INPUTS][128];
 	int i;
 	int j;
 	int valid;
@@ -684,7 +697,7 @@ void PE_I::init()
 	}
 	else
 	{
-		for (i=0;i<MAX_INPUT;i++)
+		for (i=0;i<MAX_INPUTS;i++)
 		{
 			if ( fgets (mem_c[existing_input] , 128 , pFile) != NULL )
 			{
@@ -825,7 +838,7 @@ void PE_I::init()
 				mem_cplx[i].imaginary = strtod(imag_c, NULL);
 			}
 		}
-		printf(" ### i = %d, MAX_INPUT = %d, converted =  %lf+%lfi\n", i, MAX_INPUT, mem_cplx[i].real, mem_cplx[i].imaginary);
+		printf(" ### i = %d, MAX_INPUTS = %d, converted =  %lf+%lfi\n", i, MAX_INPUTS, mem_cplx[i].real, mem_cplx[i].imaginary);
 	}
 	//printf("#########################\n");
 	free(real_c);
